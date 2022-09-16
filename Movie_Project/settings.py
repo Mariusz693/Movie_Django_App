@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_resized',
     'django_cleanup.apps.CleanupConfig',
+    'django_countries',
     'movie_app',
 ]
 
