@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib import messages
 
-from .models import User, UserUniqueToken, Person, Movie, Genre, Character, Comment
+from .models import User, Person, Movie, Genre, Character, Comment
 
 # Register your models here.
 
@@ -43,10 +43,8 @@ class PersonAdmin(admin.ModelAdmin):
 
 
 @admin.register(Movie)
-class PersonAdmin(admin.ModelAdmin):
+class MovieAdmin(admin.ModelAdmin):
     list_display = ('title', 'year', 'rating')
-
-admin.site.register(UserUniqueToken)
 
 admin.site.register(Genre)
 

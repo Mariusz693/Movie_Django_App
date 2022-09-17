@@ -60,16 +60,19 @@ class User(AbstractUser):
 
         return self.username
     
+    def get_full_name(self):
+        
+        return f'{self.first_name} {self.last_name}'
+
     def email_user(self, subject, message, from_email='webmaster@localhost', *args, **kwargs):
         
         send_mail(subject, message, from_email, [self.email,], *args, **kwargs)
 
 
 class UserUniqueToken(models.Model):
-
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
 
 class Person(models.Model):
 
@@ -102,7 +105,7 @@ class Person(models.Model):
     
     def __str__(self):
 
-        return self.first_name + ' ' + self.last_name
+        return f'{self.first_name} {self.last_name}'
 
     def unique_error_message(self, model_class, unique_check):
 
