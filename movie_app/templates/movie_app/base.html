@@ -37,25 +37,28 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 {% if request.user.is_staff %}
-                                    <li><a class="dropdown-item" href="">Nowy profil</a></li>
-                                    <li><a class="dropdown-item" href="">Nowy film</a></li>
-                                    <li><a class="dropdown-item" href="">Gatunki</a></li>
+                                    <li><a href="" class="dropdown-item">Nowy profil</a></li>
+                                    <li><a href="" class="dropdown-item">Nowy film</a></li>
+                                    <li><a href="" class="dropdown-item">Gatunki</a></li>
                                     <div class="dropdown-divider"></div>
                                 {% endif %}
-                                <li><a class="dropdown-item" href="">Moje filmy</a></li>
-                                <li><a class="dropdown-item" href="">Moje postacie</a></li>
-                                <li><a class="dropdown-item" href="">Komentarze</a></li>
+                                <li><a href="" class="dropdown-item">Moje filmy</a></li>
+                                <li><a href="" class="dropdown-item">Moje postacie</a></li>
+                                <li><a href="" class="dropdown-item">Komentarze</a></li>
                                 <div class="dropdown-divider"></div>
-                                <li><a class="dropdown-item" href="">Wyloguj</a></li>
+                                <li><a href="" class="dropdown-item">Edytuj profil</a></li>
+                                <li><a href="" class="dropdown-item">Edytuj hasło</a></li>
+                                <div class="dropdown-divider"></div>
+                                <li><a href="{% url 'user-logout' %}" class="dropdown-item">Wyloguj</a></li>
                             </ul>
                         {% else %}
                             <a class="dropdown-toggle navbar-dropdown-style" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Użytkownik
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="">Zaloguj</a></li>
+                                <li><a href="{% url 'user-login' %}" class="dropdown-item">Zaloguj</a></li>
                                 <div class="dropdown-divider"></div>
-                                <li><a class="dropdown-item" href="">Rejestracja</a></li>
+                                <li><a href="{% url 'user-register' %}" class="dropdown-item">Rejestracja</a></li>
                             </ul>
                         {% endif  %}
                     </div>
@@ -63,9 +66,9 @@
             </nav>
         </header>
         <section>
-                    <!-- //--------------------------- page content -------------------------// -->
-                    {% block content %}{% endblock content %}
-                    <!-- //--------------------------- page content end ---------------------// -->
+            <!-- //--------------------------- page content -------------------------// -->
+            {% block content %}{% endblock content %}
+            <!-- //--------------------------- page content end ---------------------// -->
         </section>
         <div class="footer-push-style"></div>
     </div>

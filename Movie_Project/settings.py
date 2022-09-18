@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 
 from pathlib import Path
+from django.urls import reverse_lazy
 
 from .local_settings import *
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django_resized',
     'django_cleanup.apps.CleanupConfig',
     'django_countries',
+    'crispy_forms',
     'movie_app',
 ]
 
@@ -138,3 +140,7 @@ DJANGORESIZED_DEFAULT_KEEP_META = True
 DJANGORESIZED_DEFAULT_FORCE_FORMAT = 'PNG'
 DJANGORESIZED_DEFAULT_FORMAT_EXTENSIONS = {'PNG': ".png"}
 DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_URL = reverse_lazy('user-login')

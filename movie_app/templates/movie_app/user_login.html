@@ -1,0 +1,53 @@
+{% extends 'movie_app/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-6 col-md-9 col-sm-12">
+        <div class="container-header-style">
+            Logowanie
+        </div>
+        <div class="container-card-style">
+            <form class="form-style" action="" method="POST">
+                {% csrf_token %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.level ==  DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <p class="text-center text-success">
+                                <strong>{{ message.message }}</strong>
+                            </p>
+                        {% endif %}
+                        {% if message.level ==  DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <p class="text-center text-danger">
+                                <strong>{{ message.message }}</strong>
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <div class="row">
+                    <div class="col-12">
+                        {{ form.username|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-12">
+                        {{ form.password|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-12">
+                        <a href="" class="text-danger">Zapomniałem hasła...</a>
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
+                    </div>
+                    <div class="col-6 right-style">
+                        <button type="submit" class="btn button-style">Zaloguj</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

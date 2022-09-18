@@ -1,0 +1,63 @@
+{% extends 'movie_app/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="container-header-style">
+            Rejestracja
+        </div>
+        <div class="container-card-style">
+            <form class="form-style" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.level ==  DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <p class="text-center text-success">
+                                <strong>{{ message.message }}</strong>
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <div class="row">
+                    <div class="col-6">
+                        {{ form.username|as_crispy_field }}
+                    </div>
+                    <div class="col-6"></div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        {{ form.first_name|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                        {{ form.last_name|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        {{ form.email|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                        {{ form.avatar|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        {{ form.password|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                        {{ form.password_repeat|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
+                    </div>
+                    <div class="col-6 right-style">
+                        <button type="submit" class="btn button-style">Zapisz</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
