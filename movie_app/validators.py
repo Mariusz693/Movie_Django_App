@@ -1,4 +1,6 @@
 from datetime import date
+from uuid import UUID, uuid4
+
 from django.core.exceptions import ValidationError
 
 
@@ -50,3 +52,13 @@ def validate_password(password):
     
     if contains_special_char is False:
         raise ValidationError(f'Hasło musi zawierać znak specjalny {special_char}')
+
+
+def validate_token(token):
+
+    try:
+        uuid_obj = UUID(token, version=4)
+    except ValueError:
+        return False
+    
+    return str(uuid_obj) == token

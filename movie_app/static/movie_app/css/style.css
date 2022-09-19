@@ -117,8 +117,15 @@ a:hover {
 }
 
 .navbar-dropdown-style {
-    margin-right: 10px;
-    font-size: 1.25rem;
+    text-align: center;
+    min-width: 175px;
+    padding-right: 10px;
+}
+
+.navbar-dropdown-style ul {
+    width: inherit;
+    width: 100%;
+    text-align: center;
 }
 
 .container-body-style {
@@ -198,6 +205,8 @@ a:hover {
     border: none;
     border-bottom: 1px solid gray;
     border-radius: 0px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .form-style input:focus {

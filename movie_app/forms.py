@@ -81,3 +81,71 @@ class UserLoginForm(forms.Form):
         user = authenticate(username=username, password=password)
 
         return user
+
+
+class UserPasswordUpdateForm(forms.ModelForm):
+
+    password_old = forms.CharField(label='Poprzednie hasło', widget=forms.PasswordInput())
+    password_new = forms.CharField(label='Nowe hasło', widget=forms.PasswordInput())
+    password_repeat = forms.CharField(label='Powtórz hasło', widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['password_old', 'password_new', 'password_repeat']
+
+    def clean(self):
+
+        super().clean()
+        
+        password_old = self.cleaned_data['password_old']
+        password_new = self.cleaned_data['password_new']
+        password_repeat = self.cleaned_data['password_repeat']
+        
+        if not authenticate(username=self.instance.username, password=password_old):
+            self.add_error('password_old', 'Błędne hasło')
+    
+        if password_new != password_repeat:
+            self.add_error('password_repeat', 'Hasła róźnią się od siebie')
+
+        try:
+            validate_password(password=password_new)
+        except ValidationError as e:
+            self.add_error('password_new', e)
+
+
+class UserPasswordResetForm(forms.Form):
+
+    email = forms.CharField(label='Email', widget=forms.EmailInput())
+
+    def clean(self):
+
+        super().clean()
+        email = self.cleaned_data['email']
+
+        if not User.objects.filter(email=email).first():
+            self.add_error('email', 'Brak użytkownika o podanym adresie email')
+
+
+class UserPasswordSetForm(forms.ModelForm):
+
+    password_new = forms.CharField(label='Nowe hasło', widget=forms.PasswordInput())
+    password_repeat = forms.CharField(label='Powtórz hasło', widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['password_new', 'password_repeat']
+
+    def clean(self):
+
+        super().clean()
+        
+        password_new = self.cleaned_data['password_new']
+        password_repeat = self.cleaned_data['password_repeat']
+        
+        if password_new != password_repeat:
+            self.add_error('password_repeat', 'Hasła róźnią się od siebie')
+
+        try:
+            validate_password(password=password_new)
+        except ValidationError as e:
+            self.add_error('password_new', e)

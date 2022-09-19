@@ -30,9 +30,9 @@
                         <input type="text" name="title" placeholder="Tytuł" value="">
                         <button type="submit">&#9740;</button>
                     </form>
-                    <div class="nav-item dropdown">
+                    <div class="nav-item dropdown navbar-dropdown-style">
                         {% if request.user.is_authenticated %}
-                            <a class="dropdown-toggle navbar-dropdown-style" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="dropdown-toggle font-size-1-25" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ request.user }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -46,13 +46,13 @@
                                 <li><a href="" class="dropdown-item">Moje postacie</a></li>
                                 <li><a href="" class="dropdown-item">Komentarze</a></li>
                                 <div class="dropdown-divider"></div>
-                                <li><a href="" class="dropdown-item">Edytuj profil</a></li>
-                                <li><a href="" class="dropdown-item">Edytuj hasło</a></li>
+                                <li><a href="{% url 'user-update' %}" class="dropdown-item">Edytuj profil</a></li>
+                                <li><a href="{% url 'user-password-update' %}" class="dropdown-item">Zmień hasło</a></li>
                                 <div class="dropdown-divider"></div>
                                 <li><a href="{% url 'user-logout' %}" class="dropdown-item">Wyloguj</a></li>
                             </ul>
                         {% else %}
-                            <a class="dropdown-toggle navbar-dropdown-style" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="dropdown-toggle font-size-1-25" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Użytkownik
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
