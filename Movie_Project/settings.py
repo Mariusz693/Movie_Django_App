@@ -144,3 +144,7 @@ DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = reverse_lazy('user-login')
+
+DATE_FORMAT = 'Y-m-d'
+
+USE_L10N = False

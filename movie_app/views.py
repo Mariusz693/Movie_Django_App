@@ -1,19 +1,32 @@
 from uuid import uuid4
 import uuid
 from django.shortcuts import render, redirect
-from django.views.generic import View, FormView, UpdateView
+from django.views.generic import View, FormView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-from .models import Movie, UserUniqueToken, User
+from .models import Movie, UserUniqueToken, User, Person
 from .forms import UserRegisterForm, UserLoginForm, UserPasswordUpdateForm, UserPasswordResetForm, \
-    UserPasswordSetForm
+    UserPasswordSetForm, PersonForm
 from .validators import validate_token
 
 # Create your views here.
+
+
+class TestMixin(UserPassesTestMixin):
+    
+    def test_func(self):
+
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+    
+        messages.error(self.request, message='Twój profil nie posiada uprawnień.')
+        
+        return redirect(reverse_lazy('user-login'))
 
 
 class IndexView(View):
@@ -223,4 +236,48 @@ class UserPasswordSetView(UpdateView):
         self.user_token.delete()
         messages.success(self.request, message='Zmieniono poprawnie twoje hasło, zaloguj się ponownie')
         
+        return super().form_valid(form)
+
+
+class PersonCreateView(TestMixin, CreateView):
+
+    """
+    Return person add view
+    """
+    model = Person
+    form_class = PersonForm
+    template_name = 'movie_app/person_form.html'
+
+    def get_success_url(self):
+    
+        return reverse_lazy('person-detail', args=(self.object.pk,))
+   
+    def form_valid(self, form):
+        
+        self.object = form.save()
+        messages.success(self.request, message='Dodano nowy profil')
+                
+        return super().form_valid(form)
+
+
+class PersonUpdateView(LoginRequiredMixin, UpdateView):
+
+    """
+    Return the update person view
+    """
+    model = Person
+    form_class = PersonForm
+    template_name = 'movie_app/person_form.html'
+    context_object_name = "person"
+    
+    def get_success_url(self):
+    
+        return reverse_lazy('person-detail', args=(self.object.pk,))
+    
+
+    def form_valid(self, form):
+        
+        self.object = form.save()
+        messages.success(self.request, message='Profil został zmieniony')
+                
         return super().form_valid(form)

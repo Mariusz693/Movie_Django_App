@@ -1,10 +1,14 @@
 from django import forms
-from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.contrib.auth import authenticate
 
-
-from .models import User
+from .models import User, Person
 from .validators import validate_password
+
+
+class DateInput(forms.DateInput):
+
+    input_type = 'date'
 
 
 class UserRegisterForm(forms.ModelForm):
@@ -20,20 +24,13 @@ class UserRegisterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['avatar'].required = False
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
 
-        super().clean()
-        username = self.cleaned_data['username']
-        email = self.cleaned_data['email']
+        super().clean(*args, **kwargs)
+        
         password = self.cleaned_data['password']
         password_repeat = self.cleaned_data['password_repeat']
 
-        if User.objects.filter(username=username).first():
-            self.add_error('username', 'Nazwa użytkownika już zarejestrowana w serwisie')
-        
-        if User.objects.filter(email=email).first():
-            self.add_error('email', 'Email już zarejestrowany w serwisie')
-        
         if password != password_repeat:
             self.add_error('password_repeat', 'Hasła róźnią się od siebie')
 
@@ -93,9 +90,9 @@ class UserPasswordUpdateForm(forms.ModelForm):
         model = User
         fields = ['password_old', 'password_new', 'password_repeat']
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
 
-        super().clean()
+        super().clean(*args, **kwargs)
         
         password_old = self.cleaned_data['password_old']
         password_new = self.cleaned_data['password_new']
@@ -117,9 +114,10 @@ class UserPasswordResetForm(forms.Form):
 
     email = forms.CharField(label='Email', widget=forms.EmailInput())
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
 
-        super().clean()
+        super().clean(*args, **kwargs)
+
         email = self.cleaned_data['email']
 
         if not User.objects.filter(email=email).first():
@@ -135,9 +133,9 @@ class UserPasswordSetForm(forms.ModelForm):
         model = User
         fields = ['password_new', 'password_repeat']
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
 
-        super().clean()
+        super().clean(*args, **kwargs)
         
         password_new = self.cleaned_data['password_new']
         password_repeat = self.cleaned_data['password_repeat']
@@ -149,3 +147,30 @@ class UserPasswordSetForm(forms.ModelForm):
             validate_password(password=password_new)
         except ValidationError as e:
             self.add_error('password_new', e)
+
+
+class PersonForm(forms.ModelForm):
+
+    class Meta:
+        model = Person
+        fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death', 'country', 'biography', 'avatar',]
+        widgets = {
+            'date_of_birth': DateInput(),
+            'date_of_death': DateInput(),
+            'biography': forms.Textarea(attrs={'rows':10}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['avatar'].required = False
+
+    def clean(self, *args, **kwargs):
+        
+        super().clean(*args, **kwargs)
+
+        date_of_birth = self.cleaned_data['date_of_birth']
+        date_of_death = self.cleaned_data['date_of_death']
+
+        if date_of_death:
+            if date_of_birth >= date_of_death:
+                self.add_error('date_of_death', 'Data śmierci nie może być wcześniej niż urodzenia')

@@ -1,0 +1,68 @@
+{% extends 'movie_app/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="container-header-style">
+            {% if person %}
+                Edytuj - {{ person }}
+            {% else %}
+                Nowy profil
+            {% endif %}
+        </div>
+        <div class="container-card-style">    
+            <form class="form-style" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <p class="text-center text-danger">
+                            <strong>{{ error }}</strong>
+                        </p>
+                    {% endfor %}
+                {% endif %}
+                <div class="row">
+                    <div class="col-6">
+                        {{ form.first_name|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                        {{ form.last_name|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-4">
+                        {{ form.date_of_birth|as_crispy_field }}
+                    </div>
+                    <div class="col-4">
+                        {{ form.date_of_death|as_crispy_field }}
+                    </div>
+                    <div class="col-4">
+                        {{ form.country|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-12">
+                        {{ form.biography|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-12">
+                        {{ form.avatar|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        {% if person %}
+                            <a href="" class="btn button-style">Anuluj</a>
+                        {% else %}
+                            <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
+                        {% endif %}
+                    </div>
+                    <div class="col-6 right-style">
+                        <button type="submit" class="btn button-style">Zapisz</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
