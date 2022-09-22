@@ -1,0 +1,29 @@
+{% extends 'movie_app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-4 col-md-8 col-sm-12">
+        <div class="container-header-style">
+            Potwierdź usunięcie - {{ person }}
+        </div>
+        <div class="container-card-style">
+            <form class="form-style" action="" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <p class="text-center text-danger">
+                        <strong>Usuwając profil zostaje on wykasowany z wszystkich filmów</strong>
+                    </p>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        <a href="{% url 'person-detail' pk=person.pk %}" class="btn button-style">Anuluj</a>
+                    </div>
+                    <div class="col-6 right-style">
+                        <button type="submit" class="btn button-style">Potwierdź</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

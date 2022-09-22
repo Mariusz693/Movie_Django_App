@@ -1,7 +1,7 @@
 from uuid import uuid4
-import uuid
-from django.shortcuts import render, redirect
-from django.views.generic import View, FormView, UpdateView, CreateView
+from datetime import date
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import View, FormView, UpdateView, CreateView, ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models import Movie, UserUniqueToken, User, Person
 from .forms import UserRegisterForm, UserLoginForm, UserPasswordUpdateForm, UserPasswordResetForm, \
-    UserPasswordSetForm, PersonForm
+    UserPasswordSetForm, PersonForm, PersonSearchForm
 from .validators import validate_token
 
 # Create your views here.
@@ -251,13 +251,6 @@ class PersonCreateView(TestMixin, CreateView):
     def get_success_url(self):
     
         return reverse_lazy('person-detail', args=(self.object.pk,))
-   
-    def form_valid(self, form):
-        
-        self.object = form.save()
-        messages.success(self.request, message='Dodano nowy profil')
-                
-        return super().form_valid(form)
 
 
 class PersonUpdateView(LoginRequiredMixin, UpdateView):
@@ -275,9 +268,108 @@ class PersonUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('person-detail', args=(self.object.pk,))
     
 
-    def form_valid(self, form):
+class PersonDeleteView(LoginRequiredMixin, DeleteView):
+
+    """
+    Return the delete person view
+    """
+    model = Person
+    template_name = 'movie_app/person_delete.html'
+    context_object_name = 'person'
+    success_url = reverse_lazy('person-list')
+
+
+class PersonDetailView(DetailView):
+
+    """
+    Return the detail person view
+    """
+    model = Person
+    template_name = 'movie_app/person_detail.html'
+    context_object_name = 'person'
+    
+    def get_context_data(self, *args, **kwargs):
         
-        self.object = form.save()
-        messages.success(self.request, message='Profil został zmieniony')
+        context = super().get_context_data(*args, **kwargs)
+        
+        if self.object.date_of_death is None:
+            age = date.today().year - self.object.date_of_birth.year
+            context['age'] = age
+
+        return context
+
+
+class PersonListView(ListView):
+
+    """
+    Return the person list view
+    """
+    model = Person
+    template_name = 'movie_app/person_list.html'
+    context_object_name = 'person_list'
+    paginate_by = 10
+
+    def get_queryset(self, *args, **kwargs):
+
+        person_list = Person.objects.all()
+        self.form = PersonSearchForm(self.request.GET)
+        self.search_count = ''
+        
+        if self.form.is_valid():
+            
+            if 'first_name' in self.form.changed_data:
+                person_list = person_list.filter(first_name__icontains=self.form.cleaned_data['first_name'])
+            
+            if 'last_name' in self.form.changed_data:
+                person_list = person_list.filter(last_name__icontains=self.form.cleaned_data['last_name'])
+            
+            if self.form.changed_data:
+                self.search_count = person_list.count()
                 
-        return super().form_valid(form)
+        return person_list
+        
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data(*args, **kwargs)
+        
+        context['form'] = self.form
+        context['search_count'] = self.search_count
+        context['path_pagination'] = self.request.get_full_path().split('&page=')[0]
+        
+        return context
+
+
+class PersonMoviesListView(ListView):
+
+    """
+    Return the list all movie for person view
+    """
+    template_name = 'movie_app/person_movies.html'
+    context_object_name = 'object_list'
+    paginate_by = 10
+
+    def get_queryset(self, *args, **kwargs):
+        
+        self.person = get_object_or_404(Person, pk=self.kwargs['pk'])
+        self.status = self.kwargs['status']
+
+        if self.status == 'director':
+
+            return self.person.directors.all()
+        
+        elif self.status == 'screenplay':
+
+            return self.person.screenplays.all()
+        
+        elif self.status != 'character':
+            self.status = 'character'
+
+        return self.person.person_characters.all()
+        
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data(*args, **kwargs)
+        context['person'] = self.person
+        context['status'] = self.status
+
+        return context

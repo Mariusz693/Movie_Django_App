@@ -52,7 +52,7 @@
                 <div class="row row-margin-style">
                     <div class="col-6">
                         {% if person %}
-                            <a href="" class="btn button-style">Anuluj</a>
+                            <a href="{% url 'person-detail' pk=person.pk %}" class="btn button-style">Anuluj</a>
                         {% else %}
                             <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
                         {% endif %}

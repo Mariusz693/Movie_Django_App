@@ -157,7 +157,7 @@ class PersonForm(forms.ModelForm):
         widgets = {
             'date_of_birth': DateInput(),
             'date_of_death': DateInput(),
-            'biography': forms.Textarea(attrs={'rows':10}),
+            'biography': forms.Textarea(attrs={'rows':6}),
         }
     
     def __init__(self, *args, **kwargs):
@@ -174,3 +174,10 @@ class PersonForm(forms.ModelForm):
         if date_of_death:
             if date_of_birth >= date_of_death:
                 self.add_error('date_of_death', 'Data śmierci nie może być wcześniej niż urodzenia')
+
+
+class PersonSearchForm(forms.Form):
+
+    first_name = forms.CharField(label='Imię', max_length=64, required=False)
+    last_name = forms.CharField(label='Nazwisko', max_length=64, required=False)
+    

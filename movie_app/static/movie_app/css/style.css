@@ -134,7 +134,8 @@ a:hover {
 }
 
 .container-header-style {
-    padding: 10px;
+    margin: 5px;
+    padding: 15px;
     text-align: center;
     font-size: 1.5rem;
 }
@@ -183,8 +184,60 @@ a:hover {
 .container-card-style {
     margin: 5px;
     padding: 15px;
+    color: white;
     border: 2px solid gray;
     border-radius: 10px;
+}
+
+.container-card-style-2 {
+    margin: 5px;
+    padding: 15px;
+    color: white;
+}
+
+.container-image-style {
+    margin: 5px;
+}
+
+.container-image-style img {
+    width: 100%;
+    border: 2px solid gray;
+    border-radius: 10px;
+}
+
+.list-none-style {
+    list-style: none;
+}
+
+.list-none-style span {
+    color: #ffdb00;
+}
+
+
+.text-style {
+    text-indent: 30px;
+    text-align: justify;
+}
+
+.table-style tr td {
+    color: white;
+    vertical-align: middle;
+    border-bottom: 2px solid gray;
+}
+
+.table-style img {
+    width: 64px;
+    margin: 5px;
+    background-color: white;
+    border: 2px solid gray;
+    border-radius: 5px;
+}
+
+.table-style ul {
+    list-style: none;
+    margin-bottom: 0px;
+    margin-left: -25px;
+    margin-right: 25px;
 }
 
 .row-margin-style {
@@ -195,8 +248,24 @@ a:hover {
     text-align: right;
 }
 
+.left-style {
+    text-align: left;
+}
+
 .button-style {
     background-color: #ffdb00;
+    margin-top: 5px;
+}
+
+.button-outline-style {
+    color: white;
+    background-color: black;
+    border: 1px solid #ffdb00;
+    margin-top: 5px;
+}
+
+.button-outline-style:hover {
+    color: white;
 }
 
 .form-style input,
@@ -262,4 +331,81 @@ a:hover {
 .form-style textarea:-webkit-autofill,
 .form-style select:-webkit-autofill {
     -webkit-text-fill-color: white !important;
+}
+
+.button-search-style {
+    background-color: black;
+    margin-bottom: -2.5px;
+    color: #ffdb00;
+    border: none;
+    font-size: 1.5rem;    
+}
+
+.card-slider-style {
+    margin: 1px;
+    margin-top: 15px;
+    position: relative;
+}
+
+.card-slider-row-style {
+    display: flex;
+}
+
+.card-slider-body-style {
+    width: 175px;
+    background-color: black;
+    border: none;
+    position: relative;
+}
+
+.card-slider-body-style img {
+    width: 100%;
+    background-color: white;
+    border: 2px solid gray;
+    border-radius: 10px;
+}
+
+.card-slider-body-style div {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.corner-star-style {
+    position: absolute;
+    left: 6px;
+    color: black;
+    font-weight: bold;
+}
+
+.corner-star-style span {
+    color: #ffdb00;
+    font-size: 1.5rem;
+}
+
+.card-slider-button-style button {
+    width: 40px;
+    height: 40px;
+    background: black;
+    border: 1px solid #ffdb00;
+    color:#ffdb00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 5px;
+    font-size: 2rem;
+    font-weight: bold;
+    border-radius: 50%;
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+}
+
+.card-slider-button-style .prev {
+    left: -15px;
+    padding-right: 2.5px;
+}
+
+.card-slider-button-style .next {
+    right: -15px;
+    padding-left: 2.5px;
 }

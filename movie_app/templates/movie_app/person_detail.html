@@ -1,0 +1,129 @@
+{% extends 'movie_app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="container-header-style">{{ person }}</div>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="container-image-style">
+                <a href="{{ person.avatar.url }}"><img src="{{ person.avatar.url }}" alt="Avatar"></a>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="container-card-style">
+                {% if request.user.is_authenticated and request.user.is_staff %}
+                    <div class="row">
+                        <div class="col font-size-1-5">Profil</div>
+                        <div class="col right-style font-size-1-5">
+                            <a href="{% url 'person-update' pk=person.pk %}" title="Edytuj">&#9997;</a>
+                            <a href="{% url 'person-delete' pk=person.pk %}" title="Usuń" class="text-danger">&#10008;</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="font-size-1-5">Profil</div>
+                {% endif %}
+                <div>
+                    <ul class="list-none-style">
+                        {% if age %}
+                            <li>Wiek: {{ age }} lat</li>
+                            <li>Data urodzenia: {{ person.date_of_birth|date:"j E Y" }}</li>
+                        {% else %}
+                            <li>Data urodzenia: {{ person.date_of_birth|date:"j E Y" }}</li>
+                            <li>Data śmierci: {{ person.date_of_death|date:"j E Y" }}</li>
+                        {% endif %}
+                        <li>Kraj pochodzenia: {{ person.country.name }}</li>
+                    </ul>
+                </div>
+                {% if person.biography %}
+                    <div class="font-size-1-5">Biografia</div>
+                    <div class="text-style">{{ person.biography }}</div>
+                {% endif %}
+                {% if person.directors.all or person.screenplays.all or person.characters.all %}
+                    <div class="row row-margin-style">
+                        <div class="col">
+                            {% if person.characters.all %}
+                                <button type="button" class="btn button-style" data-button="character">Aktor</button>
+                            {% endif %}
+                            {% if person.directors.all %}
+                                <button type="button" class="btn button-style" data-button="director">Reżyser</button>
+                            {% endif %}
+                            {% if person.screenplays.all %}
+                                <button type="button" class="btn button-style" data-button="screenplay">Scenarzysta</button>
+                            {% endif %}
+                        </div>
+                        <div class="col right-style font-size-1-5">
+                            {% if person.characters.all %}
+                                <a href="{% url 'person-movies' pk=person.pk status='character' %}" data-link="character" title="Lista - aktor">&#8680;</a>
+                            {% endif %}
+                            {% if person.directors.all %}
+                                <a href="{% url 'person-movies' pk=person.pk status='director' %}" data-link="director" title="Lista - reżyser">&#8680;</a>
+                            {% endif %}
+                            {% if person.screenplays.all %}
+                                <a href="{% url 'person-movies' pk=person.pk status='screenplay' %}" data-link="screenplay" title="Lista - scenarzysta">&#8680;</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if person.characters.all %}
+                        <div class="card-slider-style" data-card="character">
+                            <div class="card-slider-row-style">
+                                {% for character in person.person_characters.all %}
+                                    <div class="card-slider-body-style">
+                                        <img src="{{ character.movie.avatar.url }}" alt="Avatar">
+                                        <span class="corner-star-style">
+                                            <span>&#10029;</span>{{ character.movie.rating }}
+                                        </span>
+                                        <div><a href="">{{ character.movie }}</a></div>
+                                        <div>{{ character.role }}</div>              
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="card-slider-button-style">
+                                <button class="prev">&#8249;</button>
+                                <button class="next">&#8250;</button>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if person.directors.all %}
+                        <div class="card-slider-style" data-card="director">
+                            <div class="card-slider-row-style">
+                                {% for movie in person.directors.all %}
+                                    <div class="card-slider-body-style">
+                                        <img src="{{ movie.avatar.url }}" alt="Avatar">
+                                        <span class="corner-star-style">
+                                            <span>&#10029;</span>{{ movie.rating }}
+                                        </span>
+                                        <div><a href="">{{ movie }}</a></div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="card-slider-button-style">
+                                <button class="prev">&#8249;</button>
+                                <button class="next">&#8250;</button>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if person.screenplays.all %}
+                        <div class="card-slider-style" data-card="screenplay">
+                            <div class="card-slider-row-style">
+                                {% for movie in person.screenplays.all %}
+                                    <div class="card-slider-body-style">
+                                        <img src="{{ movie.avatar.url }}" alt="Avatar">
+                                        <span class="corner-star-style">
+                                            <span>&#10029;</span>{{ movie.rating }}
+                                        </span>
+                                        <div><a href="">{{ movie }}</a></div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="card-slider-button-style">
+                                <button class="prev">&#8249;</button>
+                                <button class="next">&#8250;</button>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

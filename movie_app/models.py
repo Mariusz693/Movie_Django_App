@@ -164,7 +164,7 @@ class Movie(models.Model):
         )
     characters = models.ManyToManyField(
         'Person',
-        related_name='starrings',
+        related_name='characters',
         verbose_name='Aktorzy',
         through='Character',
         blank=True
