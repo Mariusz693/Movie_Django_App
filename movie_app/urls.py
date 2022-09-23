@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import IndexView, UserRegisterView, UserLoginView, UserLogoutView, UserActiveAccountView, \
     UserUpdateView, UserPasswordUpdateView, UserPasswordResetView, UserPasswordSetView, PersonCreateView, \
-        PersonUpdateView, PersonListView, PersonDetailView, PersonDeleteView, PersonMoviesListView
+        PersonUpdateView, PersonListView, PersonDetailView, PersonDeleteView, PersonMoviesListView, \
+        GenreListView, GenreCreateView, GenreUpdateView, GenreDeleteView
 
 
 urlpatterns = [
@@ -20,4 +21,8 @@ urlpatterns = [
     path('person_detail/<int:pk>', view=PersonDetailView.as_view(), name='person-detail'),
     path('person_delete/<int:pk>', view=PersonDeleteView.as_view(), name='person-delete'),
     path('person_movies/<int:pk>/<str:status>', view=PersonMoviesListView.as_view(), name='person-movies'),
+    path('genre_list', view=GenreListView.as_view(), name='genre-list'),
+    path('genre_create', view=GenreCreateView.as_view(), name='genre-create'),
+    path('genre_update/<int:pk>', view=GenreUpdateView.as_view(), name='genre-update'),
+    path('genre_delete/<int:pk>', view=GenreDeleteView.as_view(), name='genre-delete'),
 ]

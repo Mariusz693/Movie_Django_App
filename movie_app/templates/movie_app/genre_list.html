@@ -1,0 +1,30 @@
+{% extends 'movie_app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="container-header-style">
+            Wszystkie gatunki filmów
+        </div>
+        <div class="container-card-style">
+            <div class="row">
+                <div class="col">
+                    <ul class="list-float-style">
+                        {% for genre in genre_list %}
+                            <li>{{ genre }}
+                                <a href="{% url 'genre-update' pk=genre.pk %}" title="Edytuj" class="font-size-1-25">&#9997;</a>
+                                <a href="{% url 'genre-delete' pk=genre.pk %}" title="Usuń" class="text-danger font-size-1-25">&#10008;</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="row row-margin-styly">
+                <div class="col right-style">
+                    <a href="{% url 'genre-create' %}" class="btn button-style">Dodaj</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

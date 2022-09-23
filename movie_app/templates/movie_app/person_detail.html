@@ -42,7 +42,7 @@
                     <div class="row row-margin-style">
                         <div class="col">
                             {% if person.characters.all %}
-                                <button type="button" class="btn button-style" data-button="character">Aktor</button>
+                                <button type="button" class="btn button-style" data-button="character">Zagrana postać</button>
                             {% endif %}
                             {% if person.directors.all %}
                                 <button type="button" class="btn button-style" data-button="director">Reżyser</button>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="col right-style font-size-1-5">
                             {% if person.characters.all %}
-                                <a href="{% url 'person-movies' pk=person.pk status='character' %}" data-link="character" title="Lista - aktor">&#8680;</a>
+                                <a href="{% url 'person-movies' pk=person.pk status='character' %}" data-link="character" title="Lista - zagrana postać">&#8680;</a>
                             {% endif %}
                             {% if person.directors.all %}
                                 <a href="{% url 'person-movies' pk=person.pk status='director' %}" data-link="director" title="Lista - reżyser">&#8680;</a>

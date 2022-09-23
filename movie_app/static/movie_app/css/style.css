@@ -409,3 +409,9 @@ a:hover {
     right: -15px;
     padding-left: 2.5px;
 }
+
+.list-float-style li {
+    margin-top: 2.5px;
+    float: left;
+    width: 33%;
+}

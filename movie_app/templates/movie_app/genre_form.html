@@ -1,0 +1,34 @@
+{% extends 'movie_app/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-4 col-md-8 col-sm-12">
+        <div class="container-header-style">
+            {% if genre %}
+                Edytuj - {{ genre }}
+            {% else %}
+                Nowy gatunek
+            {% endif %}
+        </div>
+        <div class="container-card-style">
+            <form class="form-style" action="" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-12">
+                        {{ form.name|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        <a href="{% url 'genre-list' %}" class="btn button-style">Anuluj</a>
+                    </div>
+                    <div class="col-6 right-style">
+                        <button type="submit" class="btn button-style">Zapisz</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

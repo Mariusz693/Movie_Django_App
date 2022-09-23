@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-from .models import Movie, UserUniqueToken, User, Person
+from .models import Movie, UserUniqueToken, User, Person, Genre
 from .forms import UserRegisterForm, UserLoginForm, UserPasswordUpdateForm, UserPasswordResetForm, \
     UserPasswordSetForm, PersonForm, PersonSearchForm
 from .validators import validate_token
@@ -253,7 +253,7 @@ class PersonCreateView(TestMixin, CreateView):
         return reverse_lazy('person-detail', args=(self.object.pk,))
 
 
-class PersonUpdateView(LoginRequiredMixin, UpdateView):
+class PersonUpdateView(TestMixin, UpdateView):
 
     """
     Return the update person view
@@ -268,7 +268,7 @@ class PersonUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy('person-detail', args=(self.object.pk,))
     
 
-class PersonDeleteView(LoginRequiredMixin, DeleteView):
+class PersonDeleteView(TestMixin, DeleteView):
 
     """
     Return the delete person view
@@ -334,7 +334,10 @@ class PersonListView(ListView):
         
         context['form'] = self.form
         context['search_count'] = self.search_count
-        context['path_pagination'] = self.request.get_full_path().split('&page=')[0]
+        if self.search_count:
+            context['path_pagination'] = self.request.get_full_path().split('&page=')[0] + '&page='
+        else:
+            context['path_pagination'] = self.request.get_full_path().split('?')[0] + '?page='
         
         return context
 
@@ -373,3 +376,47 @@ class PersonMoviesListView(ListView):
         context['status'] = self.status
 
         return context
+
+
+class GenreListView(TestMixin, ListView):
+
+    """
+    Return the genre list view
+    """
+    model = Genre
+    template_name = 'movie_app/genre_list.html'
+    context_object_name = 'genre_list'
+
+
+class GenreCreateView(TestMixin, CreateView):
+
+    """
+    Return the add genre view
+    """
+    model = Genre
+    fields = ['name']
+    template_name = 'movie_app/genre_form.html'
+    success_url = reverse_lazy('genre-list')
+
+
+class GenreUpdateView(TestMixin, UpdateView):
+
+    """
+    Return the edit genre view
+    """
+    model = Genre
+    fields = ['name']
+    template_name = 'movie_app/genre_form.html'
+    context_object_name = 'genre'
+    success_url = reverse_lazy('genre-list')
+
+
+class GenreDeleteView(TestMixin, DeleteView):
+
+    """
+    Return the delete genre view
+    """
+    model = Genre
+    template_name = 'movie_app/genre_delete.html'
+    context_object_name = 'genre'
+    success_url = reverse_lazy('genre-list')

@@ -4,7 +4,7 @@
 <div class="row container-body-style">
     <div class="col-lg-10 col-md-11 col-sm-12">
         <div class="row container-header-style">
-            <div class="col left-style">
+            <div class="col-9 left-style">
                 {% if search_count %}
                     Wyszukanych postaci: {{ search_count }}
                 {% else %}
@@ -13,10 +13,10 @@
                 <button type="button" id="button-more" class="button-search-style" title="Rozwiń zaawansowane">&#8681;</button>
                 <button type="button" id="button-less" class="button-search-style" title="Zwiń zaawansowane">&#8679;</button>
             </div>
-            <div class="col right-style">
+            <div class="col-3 right-style">
                 {% if is_paginated %}
                     {% if page_obj.number > 1 %}
-                        <a href="{{ path_pagination }}&page={{ page_obj.number|add:'-1' }}">&laquo;</a>
+                        <a href="{{ path_pagination }}{{ page_obj.number|add:'-1' }}">&laquo;</a>
                     {% endif %}
                     {% if page_obj.paginator.num_pages <= 1 %}
                         {{ pass }}
@@ -25,12 +25,12 @@
                             {% if page_obj.number == i %}
                                 {{ i }}
                             {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
-                                <a href="{{ path_pagination }}&page={{ i }}">{{ i }}</a>
+                                <a href="{{ path_pagination }}{{ i }}">{{ i }}</a>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
                     {% if page_obj.paginator.num_pages > page_obj.number %}
-                        <a href="{{ path_pagination }}&page={{ page_obj.number|add:'1' }}">&raquo;</a>
+                        <a href="{{ path_pagination }}{{ page_obj.number|add:'1' }}">&raquo;</a>
                     {% endif %}
                 {% endif %}
             </div>
