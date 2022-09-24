@@ -46,7 +46,13 @@ document.addEventListener("DOMContentLoaded", function() {
         let formPersonSearch = document.querySelector('#form-person-search')
         let buttonMore = document.querySelector('#button-more');
         let buttonLess = document.querySelector('#button-less');
-        
+          
+        if (formPersonSearch.dataset.is_valid == 'False') {
+            formPersonSearch.classList.remove('display-none');
+            buttonLess.classList.remove('display-none');
+            buttonMore.classList.add('display-none');
+        };
+
         buttonMore.addEventListener('click', function(){
             formPersonSearch.classList.remove('display-none');
             buttonLess.classList.remove('display-none');
@@ -57,11 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
             buttonLess.classList.add('display-none');
             buttonMore.classList.remove('display-none');
         })
-            
-        if (formPersonSearch.dataset.is_valid == 'True') {
-            formPersonSearch.classList.add('display-none');
-            buttonLess.classList.add('display-none');
-        };
     }
 
     function addSlider(element) {
@@ -162,6 +163,86 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         };        
-    };    
+    };
+
+    if (document.querySelector('#form-character-container')){
+        
+        let containerForm = document.querySelector("#form-character-container");
+        let addButton = containerForm.querySelector("#button-character-add");
+        let totalForms = containerForm.querySelector("#id_step4-TOTAL_FORMS");
+        let headerForm = containerForm.querySelector('#header-character');
+        let allForms = containerForm.querySelectorAll('.form-character-row');
+
+        let formNum = allForms.length;
+
+        addButton.addEventListener('click', addForm);
+
+        allForms.forEach(function(element) {
+            if (element.querySelector('input[type=checkbox]').checked){
+                element.querySelector('input[type=checkbox]').checked = false;
+            };
+            element.querySelector('.button-delete-character-style').addEventListener('click', deleteForm);
+        });
+
+        // Create base form element
+
+        let baseForm = allForms[0].cloneNode(true)
+        baseForm.querySelector('input[type=text]').removeAttribute('value');
+        baseForm.lastElementChild.lastElementChild.removeAttribute('value');
+        deleteError(baseForm.querySelector('select'));
+        deleteError(baseForm.querySelector('input[type=text]'));
+        if (baseForm.firstElementChild.tagName == 'p'){
+            baseForm.removeChild(baseForm.firstElementChild);
+        }
+
+        let lastForm = allForms[formNum-1]
+        if (formNum > 1 && lastForm.querySelector('select').value == '' && lastForm.querySelector('input[type=text]').value == '') {
+            containerForm.removeChild(lastForm);
+            formNum--
+            totalForms.setAttribute('value', `${formNum}`)
+        }
+
+        function addForm(e) {
+            
+            e.preventDefault();
+
+            let newForm = baseForm.cloneNode(true);
+            let formRegex = RegExp(`step4-(\\d){1}-`, 'g');
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `step4-${formNum}-`);
+            newForm.querySelector('.button-delete-character-style').addEventListener('click', deleteForm);
+            
+            newForm.querySelector('select').value = '';
+            
+            containerForm.insertBefore(newForm, containerForm.lastElementChild);
+            headerForm.classList.remove('display-none');
+
+            formNum++;
+            totalForms.setAttribute('value', `${formNum}`)
+        }
+
+        function deleteForm(e) {
+            
+            let deleteElement = e.target.parentElement.parentElement;
+            if (deleteElement.lastElementChild.lastElementChild.value) {
+                deleteElement.querySelector('input[type=checkbox]').checked = true;
+                deleteElement.classList.add('display-none');
+            }
+            else {
+                deleteElement.parentElement.removeChild(deleteElement);
+            }
+            if (containerForm.querySelectorAll('.form-character-row').length == containerForm.querySelectorAll('.form-character-row.display-none').length) {
+                headerForm.classList.add('display-none');
+            }
+        }
+
+        function deleteError(element) {
+            
+            if (element.parentElement.childElementCount > 1) {
+                element.classList.remove('is-invalid');
+                element.parentElement.removeChild(element.parentElement.lastElementChild);
+            };
+        }
+    }
+    
 
 });

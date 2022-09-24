@@ -38,7 +38,7 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 {% if request.user.is_staff %}
                                     <li><a href="{% url 'person-create' %}" class="dropdown-item">Nowy profil</a></li>
-                                    <li><a href="" class="dropdown-item">Nowy film</a></li>
+                                    <li><a href="{% url 'movie-create' %}" class="dropdown-item">Nowy film</a></li>
                                     <li><a href="{% url 'genre-list' %}" class="dropdown-item">Gatunki</a></li>
                                     <div class="dropdown-divider"></div>
                                 {% endif %}

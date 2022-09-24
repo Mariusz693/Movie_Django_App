@@ -1,19 +1,39 @@
-from uuid import uuid4
+import os
 from datetime import date
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, FormView, UpdateView, CreateView, ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from formtools.wizard.views import SessionWizardView
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 
 from .models import Movie, UserUniqueToken, User, Person, Genre
 from .forms import UserRegisterForm, UserLoginForm, UserPasswordUpdateForm, UserPasswordResetForm, \
-    UserPasswordSetForm, PersonForm, PersonSearchForm
+    UserPasswordSetForm, PersonForm, PersonSearchForm, MovieFormStep1, MovieFormStep2, MovieFormStep3, \
+    MovieFormsetStep4
 from .validators import validate_token
 
 # Create your views here.
+
+
+FORMS_MOVIE = [
+    ('step1', MovieFormStep1),
+    ('step2', MovieFormStep2),
+    ('step3', MovieFormStep3),
+    ('step4', MovieFormsetStep4)
+]
+
+TEMPLATES_MOVIE = {
+    'step1': 'movie_app/movie_form_step1.html',
+    'step2': 'movie_app/movie_form_step2.html',
+    'step3': 'movie_app/movie_form_step3.html',
+    'step4': 'movie_app/movie_formset_step4.html',
+}
 
 
 class TestMixin(UserPassesTestMixin):
@@ -420,3 +440,34 @@ class GenreDeleteView(TestMixin, DeleteView):
     template_name = 'movie_app/genre_delete.html'
     context_object_name = 'genre'
     success_url = reverse_lazy('genre-list')
+
+
+class MovieCreateView(TestMixin, SessionWizardView):
+
+    """
+    Return the create movie view in four step
+    """
+    instance = None
+    form_list = FORMS_MOVIE
+    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, ''))
+
+    def get_form_instance(self, step):
+        
+        if self.instance is None:
+            self.instance = Movie() 
+        
+        return self.instance
+
+    def get_template_names(self):
+        
+        return [TEMPLATES_MOVIE[self.steps.current]]
+    
+    def done(self, form_list, **kwargs):
+        
+        self.instance.save()
+        self.instance.genre.set(form_list[2].cleaned_data['genre'])
+        formset = form_list[3]
+        formset.instance = self.instance
+        formset.save()
+        
+        return redirect(reverse_lazy('movie-detail', args=(self.instance.pk,)))

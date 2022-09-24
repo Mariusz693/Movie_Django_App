@@ -1,0 +1,58 @@
+{% extends 'movie_app/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="container-header-style">
+            {% if movie %}
+            Edytuj film {{ movie }} - krok {{ wizard.steps.step1 }} / {{ wizard.steps.count }}
+            {% else %}
+            Nowy film - krok {{ wizard.steps.step1 }} / {{ wizard.steps.count }}
+            {% endif %}
+        </div>
+        <div class="container-card-style">
+            <form class="form-style" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+                <div class="row">
+                    <div class="col-12">
+                        {{ form.title|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        {{ form.director|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                        {{ form.screenplay|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-4">
+                        {{ form.year|as_crispy_field }}
+                    </div>
+                    <div class="col-4">
+                        {{ form.rating|as_crispy_field }}
+                    </div>
+                    <div class="col-4">
+                        {{ form.duration|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-12">
+                        {{ form.avatar|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
+                    </div>
+                    <div class="col-6 right-style">
+                        <button type="submit" class="btn button-style">Dalej</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

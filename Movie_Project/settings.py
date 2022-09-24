@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'django_countries',
     'crispy_forms',
+    'formtools',
     'movie_app',
 ]
 

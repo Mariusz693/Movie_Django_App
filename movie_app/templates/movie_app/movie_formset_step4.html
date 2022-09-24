@@ -1,0 +1,73 @@
+{% extends 'movie_app/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="container-header-style">
+            {% if movie %}
+            Edytuj film {{ movie }} - krok {{ wizard.steps.step1 }} / {{ wizard.steps.count }}
+            {% else %}
+            Nowy film - krok {{ wizard.steps.step1 }} / {{ wizard.steps.count }}
+            {% endif %}
+        </div>
+        <div class="container-card-style">
+            <form class="form-style" id="form-character-container" action="" method="POST">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+                {{ form.management_form }}
+                <div class="row">
+                    <div class="col font-size-1-25">Postać w filmie</div>
+                    <div class="col right-style">
+                        <button id="button-character-add" type="button" class="btn button-style">Dodaj</button>
+                    </div>
+                </div>
+                <div id="header-character" class="row row-margin-style">
+                    <div class="col-5">
+                        Aktor*
+                    </div>
+                    <div class="col-5">
+                        Rola*
+                    </div>
+                    <div class="col-2 text-center">
+                        Usuń
+                    </div>
+                </div>
+                {% for formset in form %}
+                    <div class="row row-margin-style form-character-row">
+                        {% if formset.non_field_errors %}
+                        {% for error in formset.non_field_errors %}
+                            <p class="col-10 text-center text-danger">
+                                <strong>{{ error }}</strong>
+                            </p>
+                        {% endfor %}
+                        {% endif %}
+                        <div class="col-5">
+                            {{ formset.person|as_crispy_field }}
+                        </div>
+                        <div class="col-5">
+                            {{ formset.role|as_crispy_field }}
+                        </div>
+                        <div class="col-2 text-center">
+                            <button type="button" class="button-delete-character-style">&#10008;</button>
+                            <span class="display-none">{{ formset.DELETE }}</span>
+                            {{ formset.movie }}
+                            {{ formset.id }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="row row-margin-style">
+                    <div class="col-6 left-style">
+                        <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
+                    </div>
+                    <div class="col-6 right-style">
+                        {% if wizard.steps.prev %}
+                            <button type="submit" name="wizard_goto_step" value="{{ wizard.steps.prev }}" class="btn button-style">Wstecz</button>
+                        {% endif %}
+                        <button type="submit" class="btn button-style">Zapisz</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,14 +1,21 @@
+from datetime import date
+
 from django import forms
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.contrib.auth import authenticate
 
-from .models import User, Person
+from .models import User, Person, Movie, Character
 from .validators import validate_password
 
 
 class DateInput(forms.DateInput):
 
     input_type = 'date'
+
+
+class DurationInput(forms.TimeInput):
+
+    input_type = 'time'
 
 
 class UserRegisterForm(forms.ModelForm):
@@ -180,4 +187,67 @@ class PersonSearchForm(forms.Form):
 
     first_name = forms.CharField(label='Imię', max_length=64, required=False)
     last_name = forms.CharField(label='Nazwisko', max_length=64, required=False)
-    
+
+
+class MovieFormStep1(forms.ModelForm):
+
+    class Meta:
+        model = Movie
+        fields = ['title', 'director', 'screenplay', 'year', 'rating', 'duration', 'avatar',]
+        widgets = {
+            'duration': DurationInput(attrs={'step': '1'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['director'].empty_label = 'Wybierz z listy'
+        self.fields['screenplay'].empty_label = 'Wybierz z listy'
+        self.fields['rating'].widget.attrs['min'] = 1.0
+        self.fields['rating'].widget.attrs['max'] = 10.0
+        self.fields['year'].widget.attrs['min'] = 1900
+        self.fields['year'].widget.attrs['max'] = date.today().year
+        self.fields['avatar'].required = False
+
+
+class MovieFormStep2(forms.ModelForm):
+
+    class Meta:
+        model = Movie
+        fields = ['plot',]
+        widgets = {
+            'plot': forms.Textarea(attrs={'rows':15}),
+        }
+
+
+class MovieFormStep3(forms.ModelForm):
+
+    class Meta:
+        model = Movie
+        fields = ['genre',]
+        widgets = {
+            'genre': forms.CheckboxSelectMultiple(),
+        }
+
+
+class CharacterForm(forms.ModelForm):
+
+    class Meta:
+        model = Character
+        fields = ['person', 'role',]
+        
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['person'].label = ''
+        self.fields['role'].label = ''
+        self.fields['person'].empty_label = 'Wybierz z listy'
+
+
+MovieFormsetStep4 = forms.inlineformset_factory(
+    Movie,
+    Character,
+    form=CharacterForm,
+    min_num=0,
+    extra=1,
+    can_delete=True,
+)

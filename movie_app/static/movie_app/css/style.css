@@ -289,8 +289,34 @@ a:hover {
     outline: none;
 }
 
+.form-style input::-webkit-outer-spin-button,
+.form-style input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-style input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .form-style input[type="file"] {
     border: none;
+}
+
+.form-style .form-check {
+    float: left;
+    width: 25%;
+    margin-top: 7.5px;
+}
+
+.form-style .form-check input {
+    background-color: white;
+    border: none;
+}
+
+.form-style .form-check input:checked {
+    background-color: black;
+    border: 1px solid white;
 }
 
 .form-style input[type="file"]:focus {
@@ -414,4 +440,11 @@ a:hover {
     margin-top: 2.5px;
     float: left;
     width: 33%;
+}
+
+.button-delete-character-style {
+    background-color: black;
+    border: none;
+    font-size: 1.25rem;
+    color: red;
 }
