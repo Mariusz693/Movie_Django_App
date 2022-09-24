@@ -1,5 +1,4 @@
 {% extends 'movie_app/base.html' %}
-{% load static %}
 {% block content %}
 <div class="row container-body-style">
     <div class="container-header-style">{{ person }}</div>
@@ -12,17 +11,17 @@
         <div class="col-sm-10">
             <div class="container-card-style">
                 <div class="row">
-                    <div class="col-9 font-size-1-5">
+                    <div class="col-8 font-size-1-5">
                         {% if status == 'character' %}
-                            Zagrana postać
+                            Aktor
                         {% elif status == 'director' %}
                             Reżyser
                         {% else %}
                             Scenariusz
                         {% endif %}
-                        <a href="{% url 'person-detail' pk=person.pk %}?status={{ status }}" title="Wstecz">&#8679;</a>
+                        <a href="{% url 'person-detail' pk=person.pk %}#movies" title="Wstecz">&#8679;</a>
                     </div>
-                    <div class="col-3 font-size-1-5 right-style">
+                    <div class="col-4 font-size-1-5 right-style">
                         {% if is_paginated %}
                             {% if page_obj.number > 1 %}
                                 <a href="?page={{ page_obj.number|add:'-1' }}">&laquo;</a>
@@ -47,18 +46,20 @@
                 <table class="table table-style">
                     <tbody>
                         {% if status == 'character' %}
-                            {% for person_movie in object_list %}
+                            {% for character in object_list %}
                                 <tr>
                                     <td class="col-1 text-center">{{ forloop.counter }}</td>
-                                    <td class="col-1 text-center"><img src="{{ person_movie.movie.avatar.url }}" alt="Avatar"></td>
+                                    <td class="col-1 text-center"><img src="{{ character.movie.avatar.url }}" alt="Avatar"></td>
                                     <td class="col-6">
                                         <ul class="list-none-style">
-                                            <li><a class="font-size-1-25" href="">{{ person_movie.movie }}</a></li>
-                                            <li>Ranking: <span>&#10029;</span> {{ person_movie.movie.rating }}</li>
-                                            <li>Rok produkcji: {{ person_movie.movie.year }} r.</li>
+                                            <li><a href="{% url 'movie-detail' pk=character.movie.pk %}" class="font-size-1-25">{{ character.movie }}</a></li>
+                                            <li>Ranking: <span>&#10029;</span> {{ character.movie.rating }}</li>
+                                            <li>Rok produkcji: {{ character.movie.year }} r.</li>
                                         </ul>
                                     </td>
-                                    <td class="col-4 text-center">{{ person_movie.role }}</td>
+                                    <td class="col-4 text-center">
+                                        Postać:</br>{{ character.role }}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         {% else %}
@@ -68,7 +69,7 @@
                                     <td class="col-1 text-center"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
                                     <td class="col-6">
                                         <ul class="list-none-style">
-                                            <li><a class="font-size-1-25" href="">{{ movie }}</a></li>
+                                            <li><a href="{% url 'movie-detail' pk=movie.pk %}" class="font-size-1-25">{{ movie }}</a></li>
                                             <li>Ranking: <span>&#10029;</span> {{ movie.rating }}</li>
                                             <li>Rok produkcji: {{ movie.year }} r.</li>
                                         </ul>
@@ -77,14 +78,14 @@
                                         {% if status == 'director' %}
                                             Scenariusz:</br>
                                             {% if movie.screenplay %}
-                                                <a href="">{{ movie.screenplay }}</a>
+                                                <a href="{% url 'person-detail' pk=movie.screenplay.pk %}">{{ movie.screenplay }}</a>
                                             {% else %}
                                                 -----
                                             {% endif %}
                                         {% elif status == 'screenplay' %}
                                             Reżyseria:</br>
                                             {% if movie.director %}
-                                                <a href="">{{ movie.director }}</a>
+                                                <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>
                                             {% else %}
                                                 -----        
                                             {% endif %}

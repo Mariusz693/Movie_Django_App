@@ -1,15 +1,16 @@
 {% extends 'movie_app/base.html' %}
-{% load static %}
 {% block content %}
 <div class="row container-body-style">
-    <div class="container-header-style">{{ person }}</div>
+    <div class="container-header-style">
+        {{ person }}
+    </div>
     <div class="row">
         <div class="col-sm-2">
             <div class="container-image-style">
                 <a href="{{ person.avatar.url }}"><img src="{{ person.avatar.url }}" alt="Avatar"></a>
             </div>
         </div>
-        <div class="col-10">
+        <div class="col-sm-10">
             <div class="container-card-style">
                 {% if request.user.is_authenticated and request.user.is_staff %}
                     <div class="row">
@@ -39,27 +40,32 @@
                     <div class="text-style">{{ person.biography }}</div>
                 {% endif %}
                 {% if person.directors.all or person.screenplays.all or person.characters.all %}
-                    <div class="row row-margin-style">
+                    <div id="movies" class="row-margin-style font-size-1-5">Filmy</div>
+                    <div class="row">
                         <div class="col">
                             {% if person.characters.all %}
-                                <button type="button" class="btn button-style" data-button="character">Zagrana postać</button>
+                                <div class="inline-block-style">
+                                    <button type="button" class="btn button-style" data-button="character">Aktor</button>
+                                    <a href="{% url 'person-movies' pk=person.pk status='character' %}" title="Lista - aktor">
+                                        <button class="btn button-outline-style">Aktor <span>&#8680;</span></button>
+                                    </a>
+                                </div>
                             {% endif %}
                             {% if person.directors.all %}
-                                <button type="button" class="btn button-style" data-button="director">Reżyser</button>
+                                <div class="inline-block-style">
+                                    <button type="button" class="btn button-style" data-button="director">Reżyser</button>
+                                    <a href="{% url 'person-movies' pk=person.pk status='director' %}" title="Lista - aktor">
+                                        <button class="btn button-outline-style">Reżyser <span>&#8680;</span></button>
+                                    </a>
+                                </div>
                             {% endif %}
                             {% if person.screenplays.all %}
-                                <button type="button" class="btn button-style" data-button="screenplay">Scenarzysta</button>
-                            {% endif %}
-                        </div>
-                        <div class="col right-style font-size-1-5">
-                            {% if person.characters.all %}
-                                <a href="{% url 'person-movies' pk=person.pk status='character' %}" data-link="character" title="Lista - zagrana postać">&#8680;</a>
-                            {% endif %}
-                            {% if person.directors.all %}
-                                <a href="{% url 'person-movies' pk=person.pk status='director' %}" data-link="director" title="Lista - reżyser">&#8680;</a>
-                            {% endif %}
-                            {% if person.screenplays.all %}
-                                <a href="{% url 'person-movies' pk=person.pk status='screenplay' %}" data-link="screenplay" title="Lista - scenarzysta">&#8680;</a>
+                                <div class="inline-block-style">
+                                    <button type="button" class="btn button-style" data-button="screenplay">Scenarzysta</button>
+                                    <a href="{% url 'person-movies' pk=person.pk status='screenplay' %}" title="Lista - aktor">
+                                        <button class="btn button-outline-style">Scenarzysta <span>&#8680;</span></button>
+                                    </a>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
@@ -72,7 +78,9 @@
                                         <span class="corner-star-style">
                                             <span>&#10029;</span>{{ character.movie.rating }}
                                         </span>
-                                        <div><a href="">{{ character.movie }}</a></div>
+                                        <div>
+                                            <a href="{% url 'movie-detail' pk=character.movie.pk %}">{{ character.movie }}</a>
+                                        </div>
                                         <div>{{ character.role }}</div>              
                                     </div>
                                 {% endfor %}
@@ -92,7 +100,10 @@
                                         <span class="corner-star-style">
                                             <span>&#10029;</span>{{ movie.rating }}
                                         </span>
-                                        <div><a href="">{{ movie }}</a></div>
+                                        <div>
+                                            <a href="{% url 'movie-detail' pk=movie.pk %}">{{ movie }}</a>
+                                        </div>
+                                        <div>{{ movie.year }}</div>              
                                     </div>
                                 {% endfor %}
                             </div>
@@ -111,7 +122,10 @@
                                         <span class="corner-star-style">
                                             <span>&#10029;</span>{{ movie.rating }}
                                         </span>
-                                        <div><a href="">{{ movie }}</a></div>
+                                        <div>
+                                            <a href="{% url 'movie-detail' pk=movie.pk %}">{{ movie }}</a>
+                                        </div>
+                                        <div>{{ movie.year }}</div>
                                     </div>
                                 {% endfor %}
                             </div>

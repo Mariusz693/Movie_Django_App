@@ -117,22 +117,16 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
+    
+    if (document.querySelector('#characters')) {
+        addSlider(document.querySelector('#characters').nextElementSibling);
+    }
 
-    if (document.querySelectorAll('[data-button').length > 0) {
+    if (document.querySelector('#movies')) {
         let allButtons = document.querySelectorAll('[data-button]')
-        let allLinks = document.querySelectorAll('[data-link]');
         let allCards = document.querySelectorAll('[data-card]');
 
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const statusParam = urlParams.get('status');
-
-        if (statusParam) {
-            setVisible(document.querySelector(`[data-button="${statusParam}"]`));
-        }
-        else {
-            setVisible(allButtons[0]);
-        };
+        setVisible(allButtons[0]);
         
         allButtons.forEach(function(element) {
             element.addEventListener('click', function(e){
@@ -140,39 +134,28 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
         
-        function setVisible (e) {
-
+        function setVisible(e){
             allButtons.forEach(function(element) {
-                if (element.classList.contains('button-outline-style')) {
-                    element.classList.remove('button-outline-style');
-                    element.classList.add('button-style');
-                };
-            });
-            
-            e.classList.remove('button-style');
-            e.classList.add('button-outline-style');
-        
-            const nameCard = e.dataset.button; 
-        
-            allLinks.forEach(function(element) {
-                if (! element.classList.contains('display-none')) {
-                    element.classList.add('display-none');
-                };
-                if (element.dataset.link == nameCard) {
-                    element.classList.remove('display-none');
+                if (element == e){
+                    element.nextElementSibling.classList.remove('display-none');
+                    element.classList.add('display-none')
+                }
+                else {
+                    element.nextElementSibling.classList.add('display-none')
+                    element.classList.remove('display-none')   
                 }
             });
-            
+
             allCards.forEach(function(element) {
-                if (! element.classList.contains('display-none')) {
-                    element.classList.add('display-none');
-                };
-                if (element.dataset.card == nameCard) {
+                if (element.dataset.card == e.dataset.button) {
                     element.classList.remove('display-none');
                     addSlider(element);
                 }
+                else {
+                    element.classList.add('display-none');
+                }
             });
-        };        
+        }   
     };
 
     if (document.querySelector('#form-character-container')){
@@ -193,8 +176,6 @@ document.addEventListener("DOMContentLoaded", function() {
             };
             element.querySelector('.button-delete-character-style').addEventListener('click', deleteForm);
         });
-
-        // Create base form element
 
         let baseForm = allForms[0].cloneNode(true)
         baseForm.querySelector('input[type=text]').removeAttribute('value');
@@ -253,6 +234,4 @@ document.addEventListener("DOMContentLoaded", function() {
             };
         }
     }
-    
-
 });

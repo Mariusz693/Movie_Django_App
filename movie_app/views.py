@@ -473,6 +473,16 @@ class MovieCreateView(TestMixin, SessionWizardView):
         return redirect(reverse_lazy('movie-detail', args=(self.instance.pk,)))
 
 
+class MovieDetailView(DetailView):
+
+    """
+    Return the detail movie view
+    """
+    model = Movie
+    template_name = 'movie_app/movie_detail.html'
+    context_object_name = 'movie'
+
+
 class MovieListView(ListView):
 
     """
@@ -527,4 +537,27 @@ class MovieListView(ListView):
         else:
             context['path_pagination'] = self.request.get_full_path().split('?')[0] + '?page='
         
+        return context
+
+
+class MoviePersonsListView(ListView):
+
+    """
+    Return the list all person for movie view
+    """
+    template_name = 'movie_app/movie_persons.html'
+    context_object_name = 'object_list'
+    paginate_by = 10
+
+    def get_queryset(self, *args, **kwargs):
+        
+        self.movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        
+        return self.movie.movie_characters.all()
+    
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data(*args, **kwargs)
+        context['movie'] = self.movie
+
         return context

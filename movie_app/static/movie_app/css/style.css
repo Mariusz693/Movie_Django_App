@@ -268,8 +268,17 @@ a:hover {
     margin-top: 5px;
 }
 
+.button-outline-style span {
+    color: #ffdb00;
+}
+
 .button-outline-style:hover {
     color: white;
+
+}
+
+.inline-block-style {
+    display: inline-block;
 }
 
 .form-style input,
@@ -426,17 +435,17 @@ a:hover {
     font-weight: bold;
     border-radius: 50%;
     position: absolute;
-    top: 40%;
+    top: 100px;
     transform: translateY(-50%);
 }
 
 .card-slider-button-style .prev {
-    left: -15px;
+    left: -7.5px;
     padding-right: 2.5px;
 }
 
 .card-slider-button-style .next {
-    right: -15px;
+    right: -7.5px;
     padding-left: 2.5px;
 }
 

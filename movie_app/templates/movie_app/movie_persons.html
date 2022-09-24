@@ -1,0 +1,64 @@
+{% extends 'movie_app/base.html' %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="container-header-style">{{ movie }}</div>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="container-image-style">
+                <a href="{{ movie.avatar.url }}"><img src="{{ movie.avatar.url }}" alt="Avatar"></a>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="container-card-style">
+                <div class="row">
+                    <div class="col-8 font-size-1-5">
+                        Aktorzy
+                        <a href="{% url 'movie-detail' pk=movie.pk %}#characters" title="Wstecz">&#8679;</a>
+                    </div>
+                    <div class="col-4 font-size-1-5 right-style">
+                        {% if is_paginated %}
+                            {% if page_obj.number > 1 %}
+                                <a href="?page={{ page_obj.number|add:'-1' }}">&laquo;</a>
+                            {% endif %}
+                            {% if page_obj.paginator.num_pages <= 1 %}
+                                {{ pass }}
+                            {% else %}
+                                {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                        {{ i }}
+                                    {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
+                                        <a href="?page={{ i }}">{{ i }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if page_obj.paginator.num_pages > page_obj.number %}
+                                <a href="?page={{ page_obj.number|add:'1' }}">&raquo;</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <table class="table table-style">
+                    <tbody>
+                        {% for character in object_list %}
+                            <tr>
+                                <td class="col-1 text-center">{{ forloop.counter }}</td>
+                                <td class="col-1 text-center"><img src="{{ character.person.avatar.url }}" alt="Avatar"></td>
+                                <td class="col-6">
+                                    <ul class="list-none-style">
+                                        <li><a href="{% url 'person-detail' pk=character.person.pk %}" class="font-size-1-25">{{ character.person }}</a></li>
+                                        <li>Kraj pochodzenia:</li>
+                                        <li>{{ character.person.country.name }}</li>
+                                        </ul>
+                                </td>
+                                <td class="col-4 text-center">
+                                    Postać:</br>{{ character.role }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

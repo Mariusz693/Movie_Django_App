@@ -10,7 +10,7 @@
                 {% for movie in movies %}
                     <div class="card-style">
                         <img src="{{ movie.avatar.url }}" alt="Avatar">
-                        <div><a href="">{{ movie }}</a></div>
+                        <div><a href="{% url 'movie-detail' pk=movie.pk %}">{{ movie }}</a></div>
                         <div><span>&#10029;</span>{{ movie.rating }}</div>
                     </div>
                 {% endfor %}

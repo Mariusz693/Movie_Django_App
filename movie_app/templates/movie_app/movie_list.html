@@ -88,7 +88,7 @@
                             <td class="col-1 text-center"><img src="{{ movie.avatar.url }}"></td>
                             <td class="col-5">
                                 <ul>
-                                    <li><a class="font-size-1-25" href="">{{ movie }}</a></li>
+                                    <li><a href="{% url 'movie-detail' pk=movie.pk %}" class="font-size-1-25">{{ movie }}</a></li>
                                     <li>Reżyseria:
                                         {% if movie.director %}
                                             <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>

@@ -1,0 +1,86 @@
+{% extends 'movie_app/base.html' %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="container-header-style">
+        {{ movie }}
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="container-image-style">
+                <a href="{{ movie.avatar.url }}"><img src="{{ movie.avatar.url }}" alt="Avatar"></a>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="container-card-style">
+                {% if request.user.is_authenticated and request.user.is_staff %}
+                    <div class="row">
+                        <div class="col font-size-1-5">Film</div>
+                        <div class="col right-style font-size-1-5">
+                            <a href="" title="Edytuj">&#9997;</a>
+                            <a href="" title="Usuń" class="text-danger">&#10008;</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="font-size-1-5">Film</div>
+                {% endif %}
+                <div>
+                    <ul class="list-none-style">
+                        <li>Ranking: <span>&#10029;</span> {{ movie.rating }}</li>
+                        <li>Reżyseria:
+                            {% if movie.director %}
+                                <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>
+                            {% else %}
+                                -----
+                            {% endif %}
+                        </li>
+                        <li>Scenariusz:
+                            {% if movie.screenplay %}
+                                <a href="{% url 'person-detail' pk=movie.screenplay.pk %}">{{ movie.screenplay }}</a>
+                            {% else %}
+                                -----
+                            {% endif %}
+                        </li>
+                        <li>Rok premiery: {{ movie.year }}</li>
+                        <li>Czas trwania: {{ movie.duration }}</li>
+                        <li>Gatunek:
+                            {% if movie.genre.all %}
+                                {{ movie.genre.all|join:", " }}
+                            {% else %}
+                                -----
+                            {% endif %}
+                        </li>
+                        </ul>
+                </div>
+                {% if movie.plot %}
+                    <div class="font-size-1-5">Fabuła</div>
+                    <div class="text-style">{{ movie.plot }}</div>
+                {% endif %}
+                {% if movie.characters.all %}
+                    <div id="characters" class="row row-margin-style">
+                        <div class="col font-size-1-5">Aktorzy
+                            <a href="{% url 'movie-persons' pk=movie.pk %}" title="Lista - aktorzy">&#8680;</a>
+                        </div>
+                    </div>
+                    <div class="card-slider-style">
+                        <div class="card-slider-row-style">
+                            {% for character in movie.movie_characters.all %}
+                                <div class="card-slider-body-style">
+                                    <img src="{{ character.person.avatar.url }}" alt="Avatar">
+                                    <div>
+                                        <a href="{% url 'person-detail' pk=character.person.pk %}">{{ character.person }}</a>
+                                    </div>
+                                    <div>{{ character.role }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="card-slider-button-style">
+                            <button class="prev">&#8249;</button>
+                            <button class="next">&#8250;</button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
