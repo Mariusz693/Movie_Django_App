@@ -26,7 +26,7 @@
                     <a href="{% url 'person-list' %}" class="navbar-main-style">Postacie</a>
                 </div>
                 <div class="col d-flex justify-content-end">
-                    <form action="" method="GET" class="navbar-form-style">
+                    <form action="{% url 'movie-list' %}" method="GET" class="navbar-form-style">
                         <input type="text" name="title" placeholder="Tytuł" value="">
                         <button type="submit">&#9740;</button>
                     </form>

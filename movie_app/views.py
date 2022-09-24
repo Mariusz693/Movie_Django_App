@@ -473,6 +473,59 @@ class MovieCreateView(TestMixin, SessionWizardView):
         return redirect(reverse_lazy('movie-detail', args=(self.instance.pk,)))
 
 
+class MovieUpdateView(TestMixin, SessionWizardView):
+
+    """
+    Return the update movie view in four step
+    """
+    instance = None
+    form_list = FORMS_MOVIE
+    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, ''))
+    
+    def get_form_instance(self, step):
+        
+        self.movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
+        
+        if self.instance is None:
+            self.instance = self.movie
+        
+        return self.instance
+
+    def get_template_names(self):
+        
+        return [TEMPLATES_MOVIE[self.steps.current]]
+    
+    def get_context_data(self, form, **kwargs):
+        
+        context = super().get_context_data(form, **kwargs)
+        context['movie'] = self.movie
+        
+        return context
+    
+    def done(self, form_list, **kwargs):
+        
+        self.instance.save()
+        self.instance.genre.set(form_list[2].cleaned_data['genre'])
+        formset = form_list[3]
+        formset.save()
+        
+        messages.success(self.request, message='Film został zmieniony')
+        
+        return redirect(reverse_lazy('movie-detail', args=(self.instance.pk,)))
+
+
+class MovieDeleteView(TestMixin, DeleteView):
+
+    """
+    Return the delete movie view
+    """
+    model = Movie
+    template_name = 'movie_app/movie_delete.html'
+    context_object_name = 'movie'
+    success_url = reverse_lazy('movie-list')
+
+
+
 class MovieDetailView(DetailView):
 
     """

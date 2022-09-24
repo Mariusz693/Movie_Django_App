@@ -16,8 +16,8 @@
                     <div class="row">
                         <div class="col font-size-1-5">Film</div>
                         <div class="col right-style font-size-1-5">
-                            <a href="" title="Edytuj">&#9997;</a>
-                            <a href="" title="Usuń" class="text-danger">&#10008;</a>
+                            <a href="{% url 'movie-update' pk=movie.pk %}" title="Edytuj">&#9997;</a>
+                            <a href="{% url 'movie-delete' pk=movie.pk %}" title="Usuń" class="text-danger">&#10008;</a>
                         </div>
                     </div>
                 {% else %}
