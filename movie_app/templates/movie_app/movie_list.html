@@ -1,0 +1,118 @@
+{% extends 'movie_app/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-10 col-md-11 col-sm-12">
+        <div class="row container-header-style">
+            <div class="col-8 left-style">
+                {% if search_count or search_count == 0 %}
+                    Wyszukanych filmów: {{ search_count }}
+                {% else %}
+                    Wszystkie filmy
+                {% endif %}
+                <button type="button" id="button-more" class="button-search-style" title="Rozwiń zaawansowane">&#8681;</button>
+                <button type="button" id="button-less" class="button-search-style display-none" title="Zwiń zaawansowane">&#8679;</button>
+            </div>
+            <div class="col-4 right-style">
+                {% if is_paginated %}
+                    {% if page_obj.number > 1 %}
+                        <a href="{{ path_pagination }}{{ page_obj.number|add:'-1' }}">&laquo;</a>
+                    {% endif %}
+                    {% if page_obj.paginator.num_pages <= 1 %}
+                        {{ pass }}
+                    {% else %}
+                        {% for i in page_obj.paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                {{ i }}
+                            {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
+                                <a href="{{ path_pagination }}{{ i }}">{{ i }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if page_obj.paginator.num_pages > page_obj.number %}
+                        <a href="{{ path_pagination }}{{ page_obj.number|add:'1' }}">&raquo;</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div id="form-movie-search" data-is_valid="{{ form.is_valid }}" class="row container-card-style-2 display-none">
+            <form class="form-style" action="" method="GET">
+                <div class="row row-style">
+                    <div class="col-6">
+                        {{ form.title|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-3">
+                        {{ form.director|as_crispy_field }}
+                    </div>
+                    <div class="col-3">
+                        {{ form.screenplay|as_crispy_field }}
+                    </div>
+                    <div class="col-3">
+                        {{ form.character|as_crispy_field }}
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-3">
+                        {{ form.year_from|as_crispy_field }}
+                    </div>
+                    <div class="col-3">
+                        {{ form.year_to|as_crispy_field }}
+                    </div>
+                    <div class="col-3">
+                        {{ form.rating_from|as_crispy_field }}
+                    </div>
+                    <div class="col-3">
+                        {{ form.rating_to|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-12">
+                        {{ form.genre|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-12 right-style">
+                        <button type="submit" class="btn button-style">Szukaj</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="container-card-style-2">
+            <table class="table table-style">
+                <tbody>
+                    {% for movie in movie_list %}
+                        <tr>
+                            <td class="col-1 text-center"><img src="{{ movie.avatar.url }}"></td>
+                            <td class="col-5">
+                                <ul>
+                                    <li><a class="font-size-1-25" href="">{{ movie }}</a></li>
+                                    <li>Reżyseria:
+                                        {% if movie.director %}
+                                            <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>
+                                        {% else %}
+                                            -----
+                                        {% endif %}
+                                    </li>
+                                    <li>Scenariusz:
+                                        {% if movie.screenplay %}
+                                            <a href="{% url 'person-detail' pk=movie.screenplay.pk %}">{{ movie.screenplay }}</a>
+                                        {% else %}
+                                            -----
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="col-2 text-center">{{ movie.genre.all|join:", " }}</td>
+                            <td class="col-2 text-center"><span>&#10029;</span> {{ movie.rating }}</td>
+                            <td class="col-2 text-center">{{ movie.year }} r.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

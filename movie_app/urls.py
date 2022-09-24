@@ -2,7 +2,7 @@ from django.urls import path
 from .views import IndexView, UserRegisterView, UserLoginView, UserLogoutView, UserActiveAccountView, \
     UserUpdateView, UserPasswordUpdateView, UserPasswordResetView, UserPasswordSetView, PersonCreateView, \
         PersonUpdateView, PersonListView, PersonDetailView, PersonDeleteView, PersonMoviesListView, \
-        GenreListView, GenreCreateView, GenreUpdateView, GenreDeleteView, MovieCreateView
+        GenreListView, GenreCreateView, GenreUpdateView, GenreDeleteView, MovieCreateView, MovieListView
 
 
 urlpatterns = [
@@ -25,5 +25,6 @@ urlpatterns = [
     path('genre_create', view=GenreCreateView.as_view(), name='genre-create'),
     path('genre_update/<int:pk>', view=GenreUpdateView.as_view(), name='genre-update'),
     path('genre_delete/<int:pk>', view=GenreDeleteView.as_view(), name='genre-delete'),
+    path('movie_list', view=MovieListView.as_view(), name='movie-list'),
     path('movie_create/', MovieCreateView.as_view(), name='movie-create'),
 ]

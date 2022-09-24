@@ -4,8 +4,8 @@
 <div class="row container-body-style">
     <div class="col-lg-10 col-md-11 col-sm-12">
         <div class="row container-header-style">
-            <div class="col-9 left-style">
-                {% if search_count %}
+            <div class="col-8 left-style">
+                {% if search_count or search_count == 0 %}
                     Wyszukanych postaci: {{ search_count }}
                 {% else %}
                     Wszystkie postacie
@@ -13,7 +13,7 @@
                 <button type="button" id="button-more" class="button-search-style" title="Rozwiń zaawansowane">&#8681;</button>
                 <button type="button" id="button-less" class="button-search-style display-none" title="Zwiń zaawansowane">&#8679;</button>
             </div>
-            <div class="col-3 right-style">
+            <div class="col-4 right-style">
                 {% if is_paginated %}
                     {% if page_obj.number > 1 %}
                         <a href="{{ path_pagination }}{{ page_obj.number|add:'-1' }}">&laquo;</a>
@@ -37,7 +37,7 @@
         </div>
         <div id="form-person-search" data-is_valid="{{ form.is_valid }}" class="row container-card-style-2 display-none">
             <form class="form-style" action="" method="GET">
-                <div class="row row-style">
+                <div class="row">
                     <div class="col-6">
                         {{ form.first_name|as_crispy_field }}
                     </div>

@@ -15,7 +15,7 @@ from django.core.files.storage import FileSystemStorage
 from .models import Movie, UserUniqueToken, User, Person, Genre
 from .forms import UserRegisterForm, UserLoginForm, UserPasswordUpdateForm, UserPasswordResetForm, \
     UserPasswordSetForm, PersonForm, PersonSearchForm, MovieFormStep1, MovieFormStep2, MovieFormStep3, \
-    MovieFormsetStep4
+    MovieFormsetStep4, MovieSearchForm
 from .validators import validate_token
 
 # Create your views here.
@@ -471,3 +471,60 @@ class MovieCreateView(TestMixin, SessionWizardView):
         formset.save()
         
         return redirect(reverse_lazy('movie-detail', args=(self.instance.pk,)))
+
+
+class MovieListView(ListView):
+
+    """
+    Return the movie list view
+    """
+    model = Movie
+    template_name = 'movie_app/movie_list.html'
+    context_object_name = 'movie_list'
+    paginate_by = 10
+
+    def get_queryset(self, *args, **kwargs):
+
+        movie_list = Movie.objects.all()
+        self.form = MovieSearchForm(self.request.GET)
+        self.search_count = ''
+        
+        if self.form.is_valid():
+            
+            if 'title' in self.form.changed_data:
+                movie_list = movie_list.filter(title__icontains=self.form.cleaned_data['title'])
+            if 'director' in self.form.changed_data:
+                movie_list = movie_list.filter(director=self.form.cleaned_data['director'])
+            if 'screenplay' in self.form.changed_data:
+                movie_list = movie_list.filter(screenplay=self.form.cleaned_data['screenplay'])
+            if 'character' in self.form.changed_data:
+                movie_list = movie_list.filter(characters=self.form.cleaned_data['character'])
+            if 'year_from' in self.form.changed_data:
+                movie_list = movie_list.filter(year__gte=self.form.cleaned_data['year_from'])
+            if 'year_to' in self.form.changed_data:
+                movie_list = movie_list.filter(year__lte=self.form.cleaned_data['year_to'])
+            if 'rating_from' in self.form.changed_data:
+                movie_list = movie_list.filter(rating__gte=self.form.cleaned_data['rating_from'])
+            if 'rating_to' in self.form.changed_data:
+                movie_list = movie_list.filter(rating__lte=self.form.cleaned_data['rating_to'])
+            if 'genre' in self.form.changed_data:
+                for genre in self.form.cleaned_data['genre']:
+                    movie_list = movie_list.filter(genre=genre)
+
+            if self.form.changed_data:
+                self.search_count = movie_list.count()
+             
+        return movie_list
+        
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data(*args, **kwargs)
+        
+        context['form'] = self.form
+        context['search_count'] = self.search_count
+        if self.search_count:
+            context['path_pagination'] = self.request.get_full_path().split('&page=')[0] + '&page='
+        else:
+            context['path_pagination'] = self.request.get_full_path().split('?')[0] + '?page='
+        
+        return context

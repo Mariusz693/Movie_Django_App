@@ -225,6 +225,10 @@ a:hover {
     border-bottom: 2px solid gray;
 }
 
+.table-style span {
+    color: #ffdb00;
+}
+
 .table-style img {
     width: 64px;
     margin: 5px;

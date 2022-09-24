@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.contrib.auth import authenticate
 
-from .models import User, Person, Movie, Character
+from .models import User, Person, Movie, Character, Genre
 from .validators import validate_password
 
 
@@ -251,3 +251,78 @@ MovieFormsetStep4 = forms.inlineformset_factory(
     extra=1,
     can_delete=True,
 )
+
+
+class MovieSearchForm(forms.Form):
+
+    title = forms.CharField(label='Tytuł', max_length=64, required=False)
+    director = forms.ModelChoiceField(
+        label='Reżyseria',
+        queryset=Person.objects.filter(directors__isnull=False).distinct(),
+        required=False
+        )
+    screenplay = forms.ModelChoiceField(
+        label='Scenariusz',
+        queryset=Person.objects.filter(screenplays__isnull=False).distinct(),
+        required=False
+        )
+    character = forms.ModelChoiceField(
+        label='Aktor',
+        queryset=Person.objects.filter(characters__isnull=False).distinct(),
+        required=False
+        )
+    year_from = forms.IntegerField(
+        label='Rok produkcji',
+        widget=forms.NumberInput(attrs={'placeholder': 'Od'}),
+        max_value=date.today().year,
+        min_value=1900,
+        required=False
+        )
+    year_to = forms.IntegerField(
+        label='Rok produkcji',
+        widget=forms.NumberInput(attrs={'placeholder': 'Do'}),
+        max_value=date.today().year,
+        min_value=1900,
+        required=False
+        )
+    rating_from = forms.DecimalField(
+        label='Ranking',
+        widget=forms.NumberInput(attrs={'placeholder': 'Od'}),
+        max_digits=3,
+        decimal_places=1,
+        min_value=1.0,
+        max_value=10.0,
+        required=False
+        )
+    rating_to = forms.DecimalField(
+        label='Ranking',
+        widget=forms.NumberInput(attrs={'placeholder': 'Do'}),
+        max_digits=3,
+        decimal_places=1,
+        min_value=1.0,
+        max_value=10.0,
+        required=False
+        )
+    genre = forms.ModelMultipleChoiceField(
+        label='Gatunek',
+        widget=forms.CheckboxSelectMultiple(),
+        queryset=Genre.objects.all(),
+        required=False
+        )
+    
+    def clean(self, *args, **kwargs):
+        
+        super().clean(*args, **kwargs)
+        
+        year_from = self.cleaned_data['year_from']
+        year_to = self.cleaned_data['year_to']
+        rating_from = self.cleaned_data['rating_from']
+        rating_to = self.cleaned_data['rating_to']
+        
+        if year_from and year_to:
+            if year_from > year_to:
+                self.add_error('year_to', 'Wpisz poprawnie, większy niż początku zakresu')
+
+        if rating_from and rating_to:
+            if rating_from > rating_to:
+                self.add_error('rating_to', 'Wpisz poprawnie, większy niż początku zakresu')

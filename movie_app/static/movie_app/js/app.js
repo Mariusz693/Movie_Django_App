@@ -41,29 +41,39 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    if (document.querySelector('#form-person-search')) {
+    function setVisibleSearch (element) {
         
-        let formPersonSearch = document.querySelector('#form-person-search')
         let buttonMore = document.querySelector('#button-more');
         let buttonLess = document.querySelector('#button-less');
-          
-        if (formPersonSearch.dataset.is_valid == 'False') {
-            formPersonSearch.classList.remove('display-none');
+        
+        if (element.dataset.is_valid == 'False') {
+            element.classList.remove('display-none');
             buttonLess.classList.remove('display-none');
             buttonMore.classList.add('display-none');
         };
 
         buttonMore.addEventListener('click', function(){
-            formPersonSearch.classList.remove('display-none');
+            element.classList.remove('display-none');
             buttonLess.classList.remove('display-none');
             buttonMore.classList.add('display-none');
         })
         buttonLess.addEventListener('click', function(){
-            formPersonSearch.classList.add('display-none');
+            element.classList.add('display-none');
             buttonLess.classList.add('display-none');
             buttonMore.classList.remove('display-none');
         })
     }
+
+    if (document.querySelector('#form-person-search')) {
+        
+        setVisibleSearch(document.querySelector('#form-person-search'));
+    }
+
+    if (document.querySelector('#form-movie-search')) {
+        
+        setVisibleSearch(document.querySelector('#form-movie-search'));
+    }
+
 
     function addSlider(element) {
         
