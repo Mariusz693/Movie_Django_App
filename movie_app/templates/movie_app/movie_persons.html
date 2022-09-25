@@ -10,36 +10,13 @@
         </div>
         <div class="col-sm-10">
             <div class="container-card-style">
-                <div class="row">
-                    <div class="col-8 font-size-1-5">
-                        Aktorzy
-                        <a href="{% url 'movie-detail' pk=movie.pk %}#characters" title="Wstecz">&#8679;</a>
-                    </div>
-                    <div class="col-4 font-size-1-5 right-style">
-                        {% if is_paginated %}
-                            {% if page_obj.number > 1 %}
-                                <a href="?page={{ page_obj.number|add:'-1' }}">&laquo;</a>
-                            {% endif %}
-                            {% if page_obj.paginator.num_pages <= 1 %}
-                                {{ pass }}
-                            {% else %}
-                                {% for i in page_obj.paginator.page_range %}
-                                    {% if page_obj.number == i %}
-                                        {{ i }}
-                                    {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
-                                        <a href="?page={{ i }}">{{ i }}</a>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                            {% if page_obj.paginator.num_pages > page_obj.number %}
-                                <a href="?page={{ page_obj.number|add:'1' }}">&raquo;</a>
-                            {% endif %}
-                        {% endif %}
-                    </div>
+                <div class="font-size-1-5">
+                    Aktorzy
+                    <a href="{% url 'movie-detail' pk=movie.pk %}#characters" title="Wstecz">&#8679;</a>
                 </div>
                 <table class="table table-style">
                     <tbody>
-                        {% for character in object_list %}
+                        {% for character in movie.movie_characters.all %}
                             <tr>
                                 <td class="col-1 text-center">{{ forloop.counter }}</td>
                                 <td class="col-1 text-center"><img src="{{ character.person.avatar.url }}" alt="Avatar"></td>

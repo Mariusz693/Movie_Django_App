@@ -1,7 +1,8 @@
+from cProfile import label
 from datetime import date
 
 from django import forms
-from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
+from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 
 from .models import User, Person, Movie, Character, Genre
@@ -326,3 +327,12 @@ class MovieSearchForm(forms.Form):
         if rating_from and rating_to:
             if rating_from > rating_to:
                 self.add_error('rating_to', 'Wpisz poprawnie, większy niż początku zakresu')
+
+
+class ContactForm(forms.Form):
+
+    email = forms.CharField(label='Email', widget=forms.EmailInput())
+    first_name = forms.CharField(label='Imię', max_length=64)
+    last_name = forms.CharField(label='Nazwisko', max_length=64)
+    subject = forms.CharField(label='Temat', max_length=64)
+    message = forms.CharField(label='Wiadomość', widget=forms.Textarea(attrs={"rows":"6"}))

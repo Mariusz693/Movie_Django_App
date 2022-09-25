@@ -46,8 +46,9 @@
                                 <li><a href="" class="dropdown-item">Moje postacie</a></li>
                                 <li><a href="" class="dropdown-item">Komentarze</a></li>
                                 <div class="dropdown-divider"></div>
-                                <li><a href="{% url 'user-update' %}" class="dropdown-item">Edytuj profil</a></li>
+                                <li><a href="{% url 'user-update' %}" class="dropdown-item">Edytuj konto</a></li>
                                 <li><a href="{% url 'user-password-update' %}" class="dropdown-item">Zmień hasło</a></li>
+                                <li><a href="{% url 'user-update' %}" class="dropdown-item">Usuń konto</a></li>
                                 <div class="dropdown-divider"></div>
                                 <li><a href="{% url 'user-logout' %}" class="dropdown-item">Wyloguj</a></li>
                             </ul>
@@ -73,7 +74,7 @@
         <div class="footer-push-style"></div>
     </div>
     <div class="footer-style text-center">
-        <div class="text-center p-3">© 2022 Copyright: Mariusz Kuleta</div>
+        <div class="text-center p-3"><a href="{% url 'contact' %}">@ Formularz kontaktowy</a></div>
     </div>
     <script src="{% static 'movie_app/js/app.js' %}"></script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

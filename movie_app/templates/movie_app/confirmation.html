@@ -1,0 +1,38 @@
+{% extends 'movie_app/base.html' %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-4 col-md-6 col-sm-8 col-10">
+        <div class="container-header-style">
+            Informacje
+        </div>
+        <div class="container-card-style">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.level ==  DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <p class="text-center text-success">
+                            <strong>{{ message.message }}</strong>
+                        </p>
+                    {% endif %}
+                    {% if message.level ==  DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <p class="text-center text-danger">
+                            <strong>{{ message.message }}</strong>
+                        </p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="text-center">
+                    Brak wiadomości
+                </p>
+            {% endif %}
+            <div class="row row-margin-style">
+                <div class="col-6">
+                    <a href="{% url 'contact' %}" class="btn button-style">Kontakt</a>
+                </div>
+                <div class="col-6 right-style">
+                    <a href="{% url 'index' %}" class="btn button-style">Strona główna</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

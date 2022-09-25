@@ -10,43 +10,20 @@
         </div>
         <div class="col-sm-10">
             <div class="container-card-style">
-                <div class="row">
-                    <div class="col-8 font-size-1-5">
-                        {% if status == 'character' %}
-                            Aktor
-                        {% elif status == 'director' %}
-                            Reżyser
-                        {% else %}
-                            Scenariusz
-                        {% endif %}
-                        <a href="{% url 'person-detail' pk=person.pk %}#movies" title="Wstecz">&#8679;</a>
-                    </div>
-                    <div class="col-4 font-size-1-5 right-style">
-                        {% if is_paginated %}
-                            {% if page_obj.number > 1 %}
-                                <a href="?page={{ page_obj.number|add:'-1' }}">&laquo;</a>
-                            {% endif %}
-                            {% if page_obj.paginator.num_pages <= 1 %}
-                                {{ pass }}
-                            {% else %}
-                                {% for i in page_obj.paginator.page_range %}
-                                    {% if page_obj.number == i %}
-                                        {{ i }}
-                                    {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
-                                        <a href="?page={{ i }}">{{ i }}</a>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                            {% if page_obj.paginator.num_pages > page_obj.number %}
-                                <a href="?page={{ page_obj.number|add:'1' }}">&raquo;</a>
-                            {% endif %}
-                        {% endif %}
-                    </div>
+                <div class="font-size-1-5">
+                    {% if status == 'character' %}
+                        Aktor
+                    {% elif status == 'director' %}
+                        Reżyser
+                    {% else %}
+                        Scenariusz
+                    {% endif %}
+                    <a href="{% url 'person-detail' pk=person.pk %}#movies" title="Wstecz">&#8679;</a>
                 </div>
                 <table class="table table-style">
                     <tbody>
                         {% if status == 'character' %}
-                            {% for character in object_list %}
+                            {% for character in person.person_characters.all %}
                                 <tr>
                                     <td class="col-1 text-center">{{ forloop.counter }}</td>
                                     <td class="col-1 text-center"><img src="{{ character.movie.avatar.url }}" alt="Avatar"></td>
@@ -62,8 +39,8 @@
                                     </td>
                                 </tr>
                             {% endfor %}
-                        {% else %}
-                            {% for movie in object_list %}
+                        {% elif status == 'director' %}
+                            {% for movie in person.directors.all %}
                                 <tr>
                                     <td class="col-1 text-center">{{ forloop.counter }}</td>
                                     <td class="col-1 text-center"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
@@ -75,21 +52,34 @@
                                         </ul>
                                     </td>
                                     <td class="col-4 text-center">
-                                        {% if status == 'director' %}
-                                            Scenariusz:</br>
-                                            {% if movie.screenplay %}
-                                                <a href="{% url 'person-detail' pk=movie.screenplay.pk %}">{{ movie.screenplay }}</a>
-                                            {% else %}
-                                                -----
-                                            {% endif %}
-                                        {% elif status == 'screenplay' %}
-                                            Reżyseria:</br>
-                                            {% if movie.director %}
-                                                <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>
-                                            {% else %}
-                                                -----        
-                                            {% endif %}
-                                        {% endif %}            
+                                        Scenariusz:</br>
+                                        {% if movie.screenplay %}
+                                            <a href="{% url 'person-detail' pk=movie.screenplay.pk %}">{{ movie.screenplay }}</a>
+                                        {% else %}
+                                            -----
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% for movie in person.screenplays.all %}
+                                <tr>
+                                    <td class="col-1 text-center">{{ forloop.counter }}</td>
+                                    <td class="col-1 text-center"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
+                                    <td class="col-6">
+                                        <ul class="list-none-style">
+                                            <li><a href="{% url 'movie-detail' pk=movie.pk %}" class="font-size-1-25">{{ movie }}</a></li>
+                                            <li>Ranking: <span>&#10029;</span> {{ movie.rating }}</li>
+                                            <li>Rok produkcji: {{ movie.year }} r.</li>
+                                        </ul>
+                                    </td>
+                                    <td class="col-4 text-center">
+                                        Reżyseria:</br>
+                                        {% if movie.director %}
+                                            <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>
+                                        {% else %}
+                                            -----        
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}

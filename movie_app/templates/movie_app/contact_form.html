@@ -4,14 +4,14 @@
 <div class="row container-body-style">
     <div class="col-lg-8 col-md-10 col-sm-12">
         <div class="container-header-style">
-            Rejestracja
+            Formularz kontaktowy
         </div>
-        <div class="container-card-style">
-            <form class="form-style" action="" method="POST" enctype="multipart/form-data">
+        <div class="container-card-style">    
+            <form class="form-style" action="" method="POST">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-6">
-                        {{ form.username|as_crispy_field }}
+                        {{ form.email|as_crispy_field }}
                     </div>
                     <div class="col-6"></div>
                 </div>
@@ -25,18 +25,13 @@
                 </div>
                 <div class="row row-margin-style">
                     <div class="col-6">
-                        {{ form.email|as_crispy_field }}
+                        {{ form.subject|as_crispy_field }}
                     </div>
-                    <div class="col-6">
-                        {{ form.avatar|as_crispy_field }}
-                    </div>
+                    <div class="col-6"></div>
                 </div>
                 <div class="row row-margin-style">
-                    <div class="col-6">
-                        {{ form.password|as_crispy_field }}
-                    </div>
-                    <div class="col-6">
-                        {{ form.password_repeat|as_crispy_field }}
+                    <div class="col-12">
+                        {{ form.message|as_crispy_field }}
                     </div>
                 </div>
                 <div class="row row-margin-style">
@@ -44,7 +39,7 @@
                         <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
                     </div>
                     <div class="col-6 right-style">
-                        <button type="submit" class="btn button-style">Zapisz</button>
+                        <button type="submit" class="btn button-style">Wyślij</button>
                     </div>
                 </div>
             </form>

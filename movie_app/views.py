@@ -15,7 +15,7 @@ from django.core.files.storage import FileSystemStorage
 from .models import Movie, UserUniqueToken, User, Person, Genre
 from .forms import UserRegisterForm, UserLoginForm, UserPasswordUpdateForm, UserPasswordResetForm, \
     UserPasswordSetForm, PersonForm, PersonSearchForm, MovieFormStep1, MovieFormStep2, MovieFormStep3, \
-    MovieFormsetStep4, MovieSearchForm
+    MovieFormsetStep4, MovieSearchForm, ContactForm
 from .validators import validate_token
 
 # Create your views here.
@@ -66,6 +66,19 @@ class IndexView(View):
         )
 
 
+class ConfirmationView(View):
+
+    """
+    Return confirmation view
+    """
+    def get(self, request):
+
+        return render(
+            request=request,
+            template_name='movie_app/confirmation.html',
+        )
+
+
 class UserRegisterView(FormView):
 
     """
@@ -73,7 +86,7 @@ class UserRegisterView(FormView):
     """
     form_class = UserRegisterForm
     template_name = 'movie_app/user_register.html'
-    success_url = reverse_lazy('user-register')
+    success_url = reverse_lazy('confirmation')
    
     def form_valid(self, form):
 
@@ -141,12 +154,13 @@ class UserActiveAccountView(View):
             user.is_active = True
             user.save()
             user_token.delete()
-            messages.success(self.request, message='Profil został aktywowany.')
+            
+            return redirect(reverse_lazy('user-login'))
         
         else:
             messages.error(self.request, message='Twój link jest błędny lub źle podany !!! Spróbuj ponownie.')
-        
-        return redirect(reverse_lazy('user-login'))
+
+            return redirect(reverse_lazy('confirmation'))
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -162,13 +176,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
        
         return self.request.user
-
-    def form_valid(self, form):
-           
-        form.save()
-        messages.success(self.request, message='Zmieniono poprawnie twój profil')
-        
-        return super().form_valid(form)
 
 
 class UserPasswordUpdateView(LoginRequiredMixin, UpdateView):
@@ -189,7 +196,6 @@ class UserPasswordUpdateView(LoginRequiredMixin, UpdateView):
         
         self.object.set_password(form.cleaned_data['password_new'])
         logout(self.request)
-        messages.success(self.request, message='Zmieniono poprawnie twoje hasło, zaloguj się ponownie')
         
         return super().form_valid(form)
 
@@ -201,7 +207,7 @@ class UserPasswordResetView(FormView):
     """
     form_class = UserPasswordResetForm
     template_name = 'movie_app/user_password_reset.html'
-    success_url = reverse_lazy('user-password-reset')
+    success_url = reverse_lazy('confirmation')
     
     def form_valid(self, form):
 
@@ -225,38 +231,88 @@ class UserPasswordResetView(FormView):
         return super().form_valid(form)
 
 
-class UserPasswordSetView(UpdateView):
+class UserPasswordSetView(View):
     
     """
     Return user password set form
-    """
-    model = User
-    form_class = UserPasswordSetForm
-    template_name = 'movie_app/user_password_set.html'
-    success_url = reverse_lazy('user-login')
-    
-    def get_object(self):
+    """    
+    def get(self, request):
        
-        token = self.request.GET.get('token')
+        token = request.GET.get('token')
         
         if token and validate_token(token) and UserUniqueToken.objects.filter(token=token).first():
-            self.user_token = UserUniqueToken.objects.get(token=token)
-            return self.user_token.user
+
+            return render(
+                request=request,
+                template_name='movie_app/user_password_set.html',
+                context={
+                    'form': UserPasswordSetForm,
+                }
+            )
 
         else:
             messages.error(self.request, message='Twój link jest błędny lub źle podany !!! Spróbuj ponownie.')
-     
-    def form_valid(self, form):
-
-        if self.object is None:
             
-            return super().form_invalid(form)
+            return redirect(reverse_lazy('confirmation'))
+     
+    def post(self, request):
         
-        self.object.set_password(form.cleaned_data['password_new'])
-        self.user_token.delete()
-        messages.success(self.request, message='Zmieniono poprawnie twoje hasło, zaloguj się ponownie')
-        
-        return super().form_valid(form)
+        form = UserPasswordSetForm(request.POST)
+
+        if form.is_valid():
+            token = request.GET.get('token')
+            user_unique_token = UserUniqueToken.objects.filter(token=token).first()
+            password_new = form.cleaned_data['password_new']
+            user = user_unique_token.user
+            user.set_password(password_new)
+            user.save()
+            user_unique_token.delete()
+
+            return redirect('user-login')
+
+
+class GenreCreateView(TestMixin, CreateView):
+
+    """
+    Return the add genre view
+    """
+    model = Genre
+    fields = ['name']
+    template_name = 'movie_app/genre_form.html'
+    success_url = reverse_lazy('genre-list')
+
+
+class GenreUpdateView(TestMixin, UpdateView):
+
+    """
+    Return the edit genre view
+    """
+    model = Genre
+    fields = ['name']
+    template_name = 'movie_app/genre_form.html'
+    context_object_name = 'genre'
+    success_url = reverse_lazy('genre-list')
+
+
+class GenreDeleteView(TestMixin, DeleteView):
+
+    """
+    Return the delete genre view
+    """
+    model = Genre
+    template_name = 'movie_app/genre_delete.html'
+    context_object_name = 'genre'
+    success_url = reverse_lazy('genre-list')
+
+
+class GenreListView(TestMixin, ListView):
+
+    """
+    Return the genre list view
+    """
+    model = Genre
+    template_name = 'movie_app/genre_list.html'
+    context_object_name = 'genre_list'
 
 
 class PersonCreateView(TestMixin, CreateView):
@@ -319,6 +375,23 @@ class PersonDetailView(DetailView):
         return context
 
 
+class PersonMoviesView(DetailView):
+
+    """
+    Return the detail person view for list all movies
+    """
+    model = Person
+    template_name = 'movie_app/person_movies.html'
+    context_object_name = 'person'
+        
+    def get_context_data(self, *args, **kwargs):
+        
+        context = super().get_context_data(*args, **kwargs)
+        context['status'] = self.kwargs['status']
+
+        return context
+
+
 class PersonListView(ListView):
 
     """
@@ -360,86 +433,6 @@ class PersonListView(ListView):
             context['path_pagination'] = self.request.get_full_path().split('?')[0] + '?page='
         
         return context
-
-
-class PersonMoviesListView(ListView):
-
-    """
-    Return the list all movie for person view
-    """
-    template_name = 'movie_app/person_movies.html'
-    context_object_name = 'object_list'
-    paginate_by = 10
-
-    def get_queryset(self, *args, **kwargs):
-        
-        self.person = get_object_or_404(Person, pk=self.kwargs['pk'])
-        self.status = self.kwargs['status']
-
-        if self.status == 'director':
-
-            return self.person.directors.all()
-        
-        elif self.status == 'screenplay':
-
-            return self.person.screenplays.all()
-        
-        elif self.status != 'character':
-            self.status = 'character'
-
-        return self.person.person_characters.all()
-        
-    def get_context_data(self, *args, **kwargs):
-        
-        context = super().get_context_data(*args, **kwargs)
-        context['person'] = self.person
-        context['status'] = self.status
-
-        return context
-
-
-class GenreListView(TestMixin, ListView):
-
-    """
-    Return the genre list view
-    """
-    model = Genre
-    template_name = 'movie_app/genre_list.html'
-    context_object_name = 'genre_list'
-
-
-class GenreCreateView(TestMixin, CreateView):
-
-    """
-    Return the add genre view
-    """
-    model = Genre
-    fields = ['name']
-    template_name = 'movie_app/genre_form.html'
-    success_url = reverse_lazy('genre-list')
-
-
-class GenreUpdateView(TestMixin, UpdateView):
-
-    """
-    Return the edit genre view
-    """
-    model = Genre
-    fields = ['name']
-    template_name = 'movie_app/genre_form.html'
-    context_object_name = 'genre'
-    success_url = reverse_lazy('genre-list')
-
-
-class GenreDeleteView(TestMixin, DeleteView):
-
-    """
-    Return the delete genre view
-    """
-    model = Genre
-    template_name = 'movie_app/genre_delete.html'
-    context_object_name = 'genre'
-    success_url = reverse_lazy('genre-list')
 
 
 class MovieCreateView(TestMixin, SessionWizardView):
@@ -525,7 +518,6 @@ class MovieDeleteView(TestMixin, DeleteView):
     success_url = reverse_lazy('movie-list')
 
 
-
 class MovieDetailView(DetailView):
 
     """
@@ -535,6 +527,16 @@ class MovieDetailView(DetailView):
     template_name = 'movie_app/movie_detail.html'
     context_object_name = 'movie'
 
+
+class MoviePersonsView(DetailView):
+
+    """
+    Return the detail movie view for list all persons
+    """
+    model = Movie
+    template_name = 'movie_app/movie_persons.html'
+    context_object_name = 'movie'
+    
 
 class MovieListView(ListView):
 
@@ -593,24 +595,29 @@ class MovieListView(ListView):
         return context
 
 
-class MoviePersonsListView(ListView):
+class ContactView(FormView):
 
     """
-    Return the list all person for movie view
+    Return contact form
     """
-    template_name = 'movie_app/movie_persons.html'
-    context_object_name = 'object_list'
-    paginate_by = 10
+    form_class = ContactForm
+    template_name = 'movie_app/contact_form.html'
+    success_url = reverse_lazy('confirmation')
+   
+    def form_valid(self, form):
 
-    def get_queryset(self, *args, **kwargs):
+        email = form.cleaned_data['email']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        subject = form.cleaned_data['subject']
+        message = form.cleaned_data['message']
+        staff_users = User.objects.filter(is_staff=True)
+        for user in staff_users:
+            user.email_user(
+                subject=subject,
+                message=f'{first_name} {last_name} : {message}',
+                from_email=email
+            )
+        messages.success(self.request, message='Twoja wiadomość została wysłana')
         
-        self.movie = get_object_or_404(Movie, pk=self.kwargs['pk'])
-        
-        return self.movie.movie_characters.all()
-    
-    def get_context_data(self, *args, **kwargs):
-        
-        context = super().get_context_data(*args, **kwargs)
-        context['movie'] = self.movie
-
-        return context
+        return super().form_valid(form)
