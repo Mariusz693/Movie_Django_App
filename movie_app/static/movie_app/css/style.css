@@ -460,3 +460,11 @@ a:hover {
     font-size: 1.25rem;
     color: red;
 }
+
+.heart-red-style {
+    color: red;
+}
+
+.heart-red-style:hover {
+    color: red;
+}

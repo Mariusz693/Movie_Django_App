@@ -1,0 +1,62 @@
+{% extends 'movie_app/base.html' %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="container-header-style">{{ request.user.get_full_name }}</div>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="container-image-style">
+                <a href="{{ request.user.avatar.url }}"><img src="{{ request.user.avatar.url }}" alt="Avatar"></a>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="container-card-style">
+                <div class="row">
+                    <div class="col-8 font-size-1-5">
+                        Polubione postacie
+                    </div>
+                    <div class="col-4 font-size-1-5 right-style">
+                        {% if is_paginated %}
+                            {% if page_obj.number > 1 %}
+                                <a href="?page={{ page_obj.number|add:'-1' }}">&laquo;</a>
+                            {% endif %}
+                            {% if page_obj.paginator.num_pages <= 1 %}
+                                {{ pass }}
+                            {% else %}
+                                {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                        {{ i }}
+                                    {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
+                                        <a href="?page={{ i }}">{{ i }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if page_obj.paginator.num_pages > page_obj.number %}
+                                <a href="?page={{ page_obj.number|add:'1' }}">&raquo;</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <table class="table table-style">
+                    <tbody>
+                        {% for person in person_list %}
+                            <tr>
+                                <td class="col-1 text-center font-size-1-5">
+                                    <a href="{% url 'user-person' pk=person.pk %}?next={{ request.path }}"
+                                    class="heart-red-style" title="Usuń z ulubionych">&#10008;</a>
+                                </td>
+                                <td class="col-1 text-center"><img src="{{ person.avatar.url }}" alt="Avatar"></td>
+                                <td class="col-5"><a href="{% url 'person-detail' pk=person.pk %}" class="font-size-1-25">{{ person }}</a></td>
+                                <td class="col-5 text-center">{{ person.country.name }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td class="col-12 text-center">Brak polubionych filmów</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -12,12 +12,21 @@
         </div>
         <div class="col-sm-10">
             <div class="container-card-style">
-                {% if request.user.is_authenticated and request.user.is_staff %}
+                {% if request.user.is_authenticated %}
                     <div class="row">
                         <div class="col font-size-1-5">Profil</div>
                         <div class="col right-style font-size-1-5">
-                            <a href="{% url 'person-update' pk=person.pk %}" title="Edytuj">&#9997;</a>
-                            <a href="{% url 'person-delete' pk=person.pk %}" title="Usuń" class="text-danger">&#10008;</a>
+                            {% if person in request.user.liked_persons.all %}
+                                <a href="{% url 'user-person' pk=person.pk %}?next={{ request.path }}"
+                                class="heart-red-style" title="Usuń z ulubionych">&#9829;</a>
+                            {% else %}
+                                <a href="{% url 'user-person' pk=person.pk %}?next={{ request.path }}"
+                                class="heart-red-style" title="Dodaj do ulubionych">&#9825;</a>
+                            {% endif %}
+                            {% if request.user.is_staff %}
+                                <a href="{% url 'person-update' pk=person.pk %}" title="Edytuj">&#9997;</a>
+                                <a href="{% url 'person-delete' pk=person.pk %}" title="Usuń" class="text-danger">&#10008;</a>
+                            {% endif %}
                         </div>
                     </div>
                 {% else %}

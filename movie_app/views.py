@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from formtools.wizard.views import SessionWizardView
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.exceptions import NON_FIELD_ERRORS
 
 
 from .models import Movie, UserUniqueToken, User, Person, Genre
@@ -44,7 +45,7 @@ class TestMixin(UserPassesTestMixin):
 
     def handle_no_permission(self):
     
-        messages.error(self.request, message='Twój profil nie posiada uprawnień.')
+        messages.error(self.request, message='Twoje konto nie posiada uprawnień.')
         
         return redirect(reverse_lazy('user-login'))
 
@@ -97,7 +98,7 @@ class UserRegisterView(FormView):
             message=f'''Witaj {user}, twój link do aktywacji konta:
                 {self.request.get_host()}{reverse_lazy('user-active-account')}?token={new_token.token}'''
         )
-        messages.success(self.request, message='Profil został utworzony, sprawdź pocztę i kliknij w link aktywacyjny aby się zalogować')
+        messages.success(self.request, message='Konto zostało utworzone, sprawdź pocztę i kliknij w link aktywacyjny aby się zalogować')
         
         return super().form_valid(form)
 
@@ -171,7 +172,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     fields = ['username', 'first_name', 'last_name', 'email', 'avatar']
     template_name = 'movie_app/user_update.html'
-    success_url = reverse_lazy('user-update')
+    success_url = reverse_lazy('index')
     
     def get_object(self):
        
@@ -226,7 +227,7 @@ class UserPasswordResetView(FormView):
                 message=f'''Witaj {user}, twój link do aktywacji konta:
                     {self.request.get_host()}{reverse_lazy('user-active-account')}?token={new_token.token}'''
                 )
-            messages.success(self.request, message='Profil nie został jeszcze aktywowany, sprawdź pocztę i kliknij w link aktywacyjny')
+            messages.success(self.request, message='Konto nie zostało jeszcze aktywowany, sprawdź pocztę i kliknij w link aktywacyjny')
         
         return super().form_valid(form)
 
@@ -269,6 +270,104 @@ class UserPasswordSetView(View):
             user_unique_token.delete()
 
             return redirect('user-login')
+
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+
+    """
+    Return the delete user view
+    """
+    model = User
+    template_name = 'movie_app/user_delete.html'
+    success_url = reverse_lazy('confirmation')
+
+    def get_object(self):
+       
+        return self.request.user
+
+    def form_valid(self, form):
+
+        staff_count = User.objects.filter(is_superuser=False, is_staff=True).count()
+        user_status = 1 if self.object.is_staff else 0
+
+        if staff_count - user_status == 0:
+            form.add_error(NON_FIELD_ERRORS, "Jesteś ostatnim użytkownikiem z załogi, nie możesz usunąć konta")
+        
+            return self.form_invalid(form)
+        
+        messages.success(self.request, message='Konto zostało usunięte')
+           
+        return super().form_valid(form)
+
+
+class UserMoviesView(LoginRequiredMixin, ListView):
+
+    """
+    Return the list all liked movies by user
+    """
+    model = Movie
+    template_name = 'movie_app/user_movies.html'
+    context_object_name = 'movie_list'
+    paginate_by = 10
+
+    def get_queryset(self, *args, **kwargs):
+
+        return self.request.user.liked_movies.all()
+
+
+class UserMovieView(LoginRequiredMixin, View):
+
+    """
+    Add or remove relation user with movie
+    """
+    def get(self, request, pk):
+        
+        user = request.user
+        movie = get_object_or_404(Movie, pk=pk)
+        next = request.GET.get('next')
+        
+        if user in movie.liked_by.all():
+            movie.liked_by.remove(user)
+            
+        else:
+            movie.liked_by.add(user)
+            
+        return redirect(next)
+
+
+class UserPersonsView(LoginRequiredMixin, ListView):
+
+    """
+    Return the list all liked persons by user
+    """
+    model = Person
+    template_name = 'movie_app/user_persons.html'
+    context_object_name = 'person_list'
+    paginate_by = 10
+
+    def get_queryset(self, *args, **kwargs):
+
+        return self.request.user.liked_persons.all()
+
+
+class UserPersonView(LoginRequiredMixin, View):
+
+    """
+    Add or remove relation user with person
+    """
+    def get(self, request, pk):
+        
+        user = request.user
+        person = get_object_or_404(Person, pk=pk)
+        next = request.GET.get('next')
+        
+        if user in person.liked_by.all():
+            person.liked_by.remove(user)
+            
+        else:
+            person.liked_by.add(user)
+            
+        return redirect(next)
 
 
 class GenreCreateView(TestMixin, CreateView):

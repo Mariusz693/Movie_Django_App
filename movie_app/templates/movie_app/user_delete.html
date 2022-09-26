@@ -1,0 +1,36 @@
+{% extends 'movie_app/base.html' %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="col-lg-4 col-md-8 col-sm-12">
+        <div class="container-header-style">
+            Potwierdź usunięcie - {{ user }}
+        </div>
+        <div class="container-card-style">
+            <form class="form-style" action="" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <p class="text-center text-danger">
+                                <strong>{{ error }}</strong>
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-center text-danger">
+                            <strong>Usuwając konto tracisz wszystkie swoje informacje </strong>
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="row row-margin-style">
+                    <div class="col-6">
+                        <a href="{% url 'index' %}" class="btn button-style">Anuluj</a>
+                    </div>
+                    <div class="col-6 right-style">
+                        <button type="submit" class="btn button-style">Potwierdź</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

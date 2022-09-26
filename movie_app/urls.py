@@ -1,10 +1,10 @@
 from django.urls import path
 
 from .views import IndexView, ConfirmationView, UserRegisterView, UserLoginView, UserLogoutView, UserActiveAccountView, \
-    UserUpdateView, UserPasswordUpdateView, UserPasswordResetView, UserPasswordSetView, GenreCreateView, \
+    UserUpdateView, UserPasswordUpdateView, UserPasswordResetView, UserPasswordSetView, UserDeleteView, UserMoviesView, GenreCreateView, \
         GenreUpdateView, GenreDeleteView, GenreListView, PersonCreateView, PersonUpdateView, PersonDeleteView, \
             PersonDetailView, PersonMoviesView, PersonListView, MovieCreateView, MovieUpdateView, MovieDeleteView, \
-                MovieDetailView, MoviePersonsView, MovieListView, ContactView
+                MovieDetailView, MoviePersonsView, MovieListView, ContactView, UserMovieView, UserPersonsView, UserPersonView
                 
 
 
@@ -19,6 +19,11 @@ urlpatterns = [
     path('user_password_update', view=UserPasswordUpdateView.as_view(), name='user-password-update'),
     path('user_password_reset', view=UserPasswordResetView.as_view(), name='user-password-reset'),
     path('user_password_set', view=UserPasswordSetView.as_view(), name='user-password-set'),
+    path('user_delete', view=UserDeleteView.as_view(), name='user-delete'),
+    path('user_movie/<int:pk>', view=UserMovieView.as_view(), name='user-movie'),
+    path('user_movies', view=UserMoviesView.as_view(), name='user-movies'),
+    path('user_person/<int:pk>', view=UserPersonView.as_view(), name='user-person'),
+    path('user_persons', view=UserPersonsView.as_view(), name='user-persons'),
     path('genre_create', view=GenreCreateView.as_view(), name='genre-create'),
     path('genre_update/<int:pk>', view=GenreUpdateView.as_view(), name='genre-update'),
     path('genre_delete/<int:pk>', view=GenreDeleteView.as_view(), name='genre-delete'),
