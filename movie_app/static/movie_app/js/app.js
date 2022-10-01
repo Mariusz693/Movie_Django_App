@@ -264,17 +264,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (document.querySelectorAll('.text-content').length) {
         document.querySelectorAll('.text-content').forEach(function(element) {
+            let maxLimit = 1000;
             if (element.parentElement.classList.contains('text-comment-style')){
-                let indexToCut = 500 + element.textContent.slice(500).indexOf(' ');
-                if (indexToCut >= 500) {
-                    setVisibleText(element, indexToCut)
-                }
+                maxLimit = 500;
             }
-            else {
-                let indexToCut = 1000 + element.textContent.slice(1000).indexOf(' ');
-                if (indexToCut >= 1000) {
-                    setVisibleText(element, indexToCut)
-                }
+            let indexToCut = maxLimit + element.textContent.slice(maxLimit).indexOf(' ');
+            if (indexToCut >= maxLimit) {
+                setVisibleText(element, indexToCut)
             }
         });
     }
