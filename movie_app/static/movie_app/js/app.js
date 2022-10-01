@@ -1,18 +1,19 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    if (document.querySelector('#container-slider')) {
-
+    if (document.querySelector('.container-slider-style')) {
+        let sliderContainer = document.querySelector('.container-slider-style');
+        
         let sliderIndex = tns({
-            container : '#container-slider',
+            container : sliderContainer.firstElementChild,
             slideBy : 1,
             speed : 400,
             nav : false,
             autoplay : true,
             autoplayTimeout : 5000,
             autoplayButtonOutput : false,
-            controlsContainer : '#container-buttons',
-            prevButton : '#container-button-prev',
-            nextButton : '#container-button-next',
+            controlsContainer : sliderContainer.lastElementChild,
+            prevButton : sliderContainer.lastElementChild.firstElementChild,
+            nextButton : sliderContainer.lastElementChild.lastElementChild,
             gutter : 20,
             responsive : {
                 1700: {
@@ -43,8 +44,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function setVisibleSearch (element) {
         
-        let buttonMore = document.querySelector('#button-more');
-        let buttonLess = document.querySelector('#button-less');
+        let buttonMore = element.previousElementSibling.firstElementChild.querySelector('.button-more');
+        let buttonLess = element.previousElementSibling.firstElementChild.querySelector('.button-less');
         
         if (element.dataset.is_valid == 'False') {
             element.classList.remove('display-none');
@@ -234,4 +235,48 @@ document.addEventListener("DOMContentLoaded", function() {
             };
         }
     }
+
+
+    function setVisibleText (contentText, indexToCut) {
+
+        let textHidden = contentText.parentElement.querySelector('.text-hidden');
+        let dotsElement = contentText.parentElement.querySelector('.dots');
+        let buttonMore = contentText.parentElement.querySelector('.button-more');
+        let buttonLess = contentText.parentElement.querySelector('.button-less');
+        textHidden.textContent = contentText.textContent.slice(indexToCut);
+        contentText.textContent = contentText.textContent.slice(0, indexToCut);
+        buttonMore.classList.remove('display-none');
+        dotsElement.classList.remove('display-none')
+    
+        buttonMore.addEventListener('click', function(){
+            textHidden.classList.remove('display-none');
+            buttonLess.classList.remove('display-none');
+            buttonMore.classList.add('display-none');
+            dotsElement.classList.add('display-none')
+        })
+        buttonLess.addEventListener('click', function(){
+            textHidden.classList.add('display-none');
+            buttonLess.classList.add('display-none');
+            buttonMore.classList.remove('display-none');
+            dotsElement.classList.remove('display-none')
+        })
+    }
+
+    if (document.querySelectorAll('.text-content').length) {
+        document.querySelectorAll('.text-content').forEach(function(element) {
+            if (element.parentElement.classList.contains('text-comment-style')){
+                let indexToCut = 500 + element.textContent.slice(500).indexOf(' ');
+                if (indexToCut >= 500) {
+                    setVisibleText(element, indexToCut)
+                }
+            }
+            else {
+                let indexToCut = 1000 + element.textContent.slice(1000).indexOf(' ');
+                if (indexToCut >= 1000) {
+                    setVisibleText(element, indexToCut)
+                }
+            }
+        });
+    }
+
 });

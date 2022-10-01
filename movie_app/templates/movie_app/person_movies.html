@@ -12,11 +12,11 @@
             <div class="container-card-style">
                 <div class="font-size-1-5">
                     {% if status == 'character' %}
-                        Aktor
+                        Aktor ( {{ person.person_characters.count }} )
                     {% elif status == 'director' %}
-                        Reżyser
+                        Reżyser ( {{ person.directors.count }} )
                     {% else %}
-                        Scenariusz
+                        Scenariusz ( {{ person.screenplays.count }} )
                     {% endif %}
                     <a href="{% url 'person-detail' pk=person.pk %}#movies" title="Wstecz">&#8679;</a>
                 </div>
@@ -25,16 +25,15 @@
                         {% if status == 'character' %}
                             {% for character in person.person_characters.all %}
                                 <tr>
-                                    <td class="col-1 text-center">{{ forloop.counter }}</td>
-                                    <td class="col-1 text-center"><img src="{{ character.movie.avatar.url }}" alt="Avatar"></td>
+                                    <td class="col-1"><img src="{{ character.movie.avatar.url }}" alt="Avatar"></td>
                                     <td class="col-6">
                                         <ul class="list-none-style">
                                             <li><a href="{% url 'movie-detail' pk=character.movie.pk %}" class="font-size-1-25">{{ character.movie }}</a></li>
-                                            <li>Ranking: <span>&#10029;</span> {{ character.movie.rating }}</li>
+                                            <li>Ranking: <span class="star-style">&#10029;</span> {{ character.movie.rating }}</li>
                                             <li>Rok produkcji: {{ character.movie.year }} r.</li>
                                         </ul>
                                     </td>
-                                    <td class="col-4 text-center">
+                                    <td class="col-5 text-center">
                                         Postać:</br>{{ character.role }}
                                     </td>
                                 </tr>
@@ -42,16 +41,15 @@
                         {% elif status == 'director' %}
                             {% for movie in person.directors.all %}
                                 <tr>
-                                    <td class="col-1 text-center">{{ forloop.counter }}</td>
-                                    <td class="col-1 text-center"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
+                                    <td class="col-1"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
                                     <td class="col-6">
                                         <ul class="list-none-style">
                                             <li><a href="{% url 'movie-detail' pk=movie.pk %}" class="font-size-1-25">{{ movie }}</a></li>
-                                            <li>Ranking: <span>&#10029;</span> {{ movie.rating }}</li>
+                                            <li>Ranking: <span class="star-style">&#10029;</span> {{ movie.rating }}</li>
                                             <li>Rok produkcji: {{ movie.year }} r.</li>
                                         </ul>
                                     </td>
-                                    <td class="col-4 text-center">
+                                    <td class="col-5 text-center">
                                         Scenariusz:</br>
                                         {% if movie.screenplay %}
                                             <a href="{% url 'person-detail' pk=movie.screenplay.pk %}">{{ movie.screenplay }}</a>
@@ -64,16 +62,15 @@
                         {% else %}
                             {% for movie in person.screenplays.all %}
                                 <tr>
-                                    <td class="col-1 text-center">{{ forloop.counter }}</td>
-                                    <td class="col-1 text-center"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
+                                    <td class="col-1"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
                                     <td class="col-6">
                                         <ul class="list-none-style">
                                             <li><a href="{% url 'movie-detail' pk=movie.pk %}" class="font-size-1-25">{{ movie }}</a></li>
-                                            <li>Ranking: <span>&#10029;</span> {{ movie.rating }}</li>
+                                            <li>Ranking: <span class="star-style">&#10029;</span> {{ movie.rating }}</li>
                                             <li>Rok produkcji: {{ movie.year }} r.</li>
                                         </ul>
                                     </td>
-                                    <td class="col-4 text-center">
+                                    <td class="col-5 text-center">
                                         Reżyseria:</br>
                                         {% if movie.director %}
                                             <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>

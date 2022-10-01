@@ -11,15 +11,14 @@
         <div class="col-sm-10">
             <div class="container-card-style">
                 <div class="font-size-1-5">
-                    Aktorzy
+                    Aktorzy ( {{ movie.characters.count }} )
                     <a href="{% url 'movie-detail' pk=movie.pk %}#characters" title="Wstecz">&#8679;</a>
                 </div>
                 <table class="table table-style">
                     <tbody>
                         {% for character in movie.movie_characters.all %}
                             <tr>
-                                <td class="col-1 text-center">{{ forloop.counter }}</td>
-                                <td class="col-1 text-center"><img src="{{ character.person.avatar.url }}" alt="Avatar"></td>
+                                <td class="col-1"><img src="{{ character.person.avatar.url }}" alt="Avatar"></td>
                                 <td class="col-6">
                                     <ul class="list-none-style">
                                         <li><a href="{% url 'person-detail' pk=character.person.pk %}" class="font-size-1-25">{{ character.person }}</a></li>
@@ -27,7 +26,7 @@
                                         <li>{{ character.person.country.name }}</li>
                                         </ul>
                                 </td>
-                                <td class="col-4 text-center">
+                                <td class="col-5 text-center">
                                     Postać:</br>{{ character.role }}
                                 </td>
                             </tr>

@@ -10,8 +10,8 @@
                 {% else %}
                     Wszystkie postacie
                 {% endif %}
-                <button type="button" id="button-more" class="button-search-style" title="Rozwiń zaawansowane">&#8681;</button>
-                <button type="button" id="button-less" class="button-search-style display-none" title="Zwiń zaawansowane">&#8679;</button>
+                <button type="button" class="button-more-style button-more" title="Rozwiń zaawansowane">&#8681;</button>
+                <button type="button" class="button-more-style button-less display-none" title="Zwiń zaawansowane">&#8679;</button>
             </div>
             <div class="col-4 right-style">
                 {% if is_paginated %}
@@ -57,7 +57,7 @@
                 <tbody>
                     {% for person in person_list %}
                         <tr>
-                            <td class="col-1 text-center"><img src="{{ person.avatar.url }}"></td>
+                            <td class="col-1"><img src="{{ person.avatar.url }}"></td>
                             <td class="col-6"><a href="{% url 'person-detail' pk=person.pk %}" class="font-size-1-25">{{ person }}</a></td>
                             <td class="col-5 text-center">{{ person.country.name }}</td>
                         </tr>

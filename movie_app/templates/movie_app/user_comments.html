@@ -12,7 +12,7 @@
             <div class="container-card-style">
                 <div class="row">
                     <div class="col-8 font-size-1-5">
-                        Polubione postacie ( {{ request.user.liked_persons.count }} )
+                        Komentarze filmów ( {{ user.user_comments.count }} )
                     </div>
                     <div class="col-4 font-size-1-5 right-style">
                         {% if is_paginated %}
@@ -36,16 +36,29 @@
                         {% endif %}
                     </div>
                 </div>
-                <table class="table table-style">
+                <table class="table table-comment-style">
                     <tbody>
-                        {% for person in person_list %}
+                        {% for comment in comment_list %}
                             <tr>
-                                <td class="col-1"><img src="{{ person.avatar.url }}" alt="Avatar"></td>
-                                <td class="col-5"><a href="{% url 'person-detail' pk=person.pk %}" class="font-size-1-25">{{ person }}</a></td>
-                                <td class="col-5 text-center">{{ person.country.name }}</td>
-                                <td class="col-1 right-style font-size-1-5">
-                                    <a href="{% url 'user-person' pk=person.pk %}?next={{ request.path }}"
-                                    class="text-danger" title="Usuń z ulubionych">&#10008;</a>
+                                <td class="col-1"><img src="{{ comment.movie.avatar.url }}" alt="Avatar"></td>
+                                <td class="col-11">
+                                    <div class="row comment-header-style">
+                                        <div class="col-10">
+                                            <a href="{% url 'movie-detail' pk=comment.movie.pk %}">{{ comment.movie }}</a>
+                                            {{ comment.date_added|date:"j E Y, H:i"}}
+                                        </div>
+                                        <div class="col-2 right-style">
+                                            <a href="{% url 'user-comment-delete' pk=comment.pk %}?next={{ request.path }}#comments"
+                                            class="text-danger" title="Usuń komentarz">&#10008;</a>
+                                        </div>
+                                    </div>
+                                    <div class="text-comment-style">
+                                        <span class="text-content">{{ comment.comment }}</span>
+                                        <span class="text-hidden display-none"></span>
+                                        <span class="dots display-none"> ...</span>
+                                        <button class="button-more-style button-more display-none" title="Rozwiń tekst">&#8681;</button>
+                                        <button class="button-more-style button-less display-none" title="Zwin tekst">&#8679;</button>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}

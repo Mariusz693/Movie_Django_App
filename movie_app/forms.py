@@ -5,7 +5,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 
-from .models import User, Person, Movie, Character, Genre
+from .models import User, Person, Movie, Character, Genre, Comment
 from .validators import validate_password
 
 
@@ -47,7 +47,7 @@ class UserRegisterForm(forms.ModelForm):
         except ValidationError as e:
             self.add_error('password', e)
         
-    def save(self, commit=True):
+    def save(self, commit=True, *args, **kwargs):
 
         return User.objects.create_user(
             username=self.cleaned_data['username'],
@@ -78,7 +78,7 @@ class UserLoginForm(forms.Form):
         elif not authenticate(username=username, password=password):
             self.add_error('password', 'Błędne hasło')
     
-    def authenticate_user(self):
+    def authenticate_user(self, *args, **kwargs):
 
         username = self.cleaned_data['username']
         password = self.cleaned_data['password']
@@ -155,6 +155,22 @@ class UserPasswordSetForm(forms.ModelForm):
             validate_password(password=password_new)
         except ValidationError as e:
             self.add_error('password_new', e)
+
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ['comment', 'user', 'movie']
+        widgets = {
+            'comment': forms.Textarea(attrs={"rows":"3", "placeholder":"....."}),
+            'user': forms.HiddenInput(),
+            'movie': forms.HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['comment'].label = ''
 
 
 class PersonForm(forms.ModelForm):
@@ -236,7 +252,6 @@ class CharacterForm(forms.ModelForm):
         model = Character
         fields = ['person', 'role',]
         
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['person'].label = ''

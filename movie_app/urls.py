@@ -1,10 +1,11 @@
 from django.urls import path
 
 from .views import IndexView, ConfirmationView, UserRegisterView, UserLoginView, UserLogoutView, UserActiveAccountView, \
-    UserUpdateView, UserPasswordUpdateView, UserPasswordResetView, UserPasswordSetView, UserDeleteView, UserMoviesView, GenreCreateView, \
-        GenreUpdateView, GenreDeleteView, GenreListView, PersonCreateView, PersonUpdateView, PersonDeleteView, \
-            PersonDetailView, PersonMoviesView, PersonListView, MovieCreateView, MovieUpdateView, MovieDeleteView, \
-                MovieDetailView, MoviePersonsView, MovieListView, ContactView, UserMovieView, UserPersonsView, UserPersonView
+    UserUpdateView, UserPasswordUpdateView, UserPasswordResetView, UserPasswordSetView, UserDeleteView, UserMovieView, \
+        UserMoviesView, UserPersonView, UserPersonsView, UserCommentsView, UserCommentDeleteView, GenreCreateView, \
+            GenreUpdateView, GenreDeleteView, GenreListView, PersonCreateView, PersonUpdateView, PersonDeleteView, \
+                PersonDetailView, PersonMoviesView, PersonListView, MovieCreateView, MovieUpdateView, MovieDeleteView, \
+                    MovieDetailView, MoviePersonsView, MovieCommentsView, MovieListView, ContactView
                 
 
 
@@ -24,6 +25,8 @@ urlpatterns = [
     path('user_movies', view=UserMoviesView.as_view(), name='user-movies'),
     path('user_person/<int:pk>', view=UserPersonView.as_view(), name='user-person'),
     path('user_persons', view=UserPersonsView.as_view(), name='user-persons'),
+    path('user_comments', view=UserCommentsView.as_view(), name='user-comments'),
+    path('user_comment_delete/<int:pk>', view=UserCommentDeleteView.as_view(), name='user-comment-delete'),
     path('genre_create', view=GenreCreateView.as_view(), name='genre-create'),
     path('genre_update/<int:pk>', view=GenreUpdateView.as_view(), name='genre-update'),
     path('genre_delete/<int:pk>', view=GenreDeleteView.as_view(), name='genre-delete'),
@@ -39,6 +42,7 @@ urlpatterns = [
     path('movie_delete/<int:pk>', view=MovieDeleteView.as_view(), name='movie-delete'),
     path('movie_detail/<int:pk>', view=MovieDetailView.as_view(), name='movie-detail'),
     path('movie_persons/<int:pk>', view=MoviePersonsView.as_view(), name='movie-persons'),
+    path('movie_comments/<int:pk>', view=MovieCommentsView.as_view(), name='movie-comments'),
     path('movie_list', view=MovieListView.as_view(), name='movie-list'),
     path('contact', view=ContactView.as_view(), name='contact'),
 ]

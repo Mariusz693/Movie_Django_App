@@ -3,21 +3,21 @@
 <div class="row container-body-style">
     <div class="col-10">
         <div class="container-header-style">
-            <a href="" title="Ranking" class="font-size-2-5">Top {{ movies.count }} filmów</a>
+            <a href="{% url 'movie-list' %}" title="Ranking" class="font-size-2-5">Top {{ movies.count }} filmów</a>
         </div>
         <div class="container-slider-style">
-            <div id="container-slider">
+            <div>
                 {% for movie in movies %}
                     <div class="card-style">
                         <img src="{{ movie.avatar.url }}" alt="Avatar">
                         <div><a href="{% url 'movie-detail' pk=movie.pk %}">{{ movie }}</a></div>
-                        <div><span>&#10029;</span>{{ movie.rating }}</div>
+                        <div><span class="star-style">&#10029;</span>{{ movie.rating }}</div>
                     </div>
                 {% endfor %}
             </div>
-            <div id="container-buttons" class="">
-                <button id="container-button-prev" class="prev">&#8249;</button>
-                <button id="container-button-next" class="next">&#8250;</button>
+            <div>
+                <button class="prev">&#8249;</button>
+                <button class="next">&#8250;</button>
             </div>
         </div>
     </div>

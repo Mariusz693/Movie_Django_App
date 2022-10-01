@@ -12,7 +12,7 @@
             <div class="container-card-style">
                 <div class="row">
                     <div class="col-8 font-size-1-5">
-                        Polubione filmy
+                        Polubione filmy ( {{ request.user.liked_movies.count }} )
                     </div>
                     <div class="col-4 font-size-1-5 right-style">
                         {% if is_paginated %}
@@ -40,11 +40,7 @@
                     <tbody>
                         {% for movie in movie_list %}
                             <tr>
-                                <td class="col-1 text-center font-size-1-5">
-                                    <a href="{% url 'user-movie' pk=movie.pk %}?next={{ request.path }}"
-                                    class="heart-red-style" title="Usuń z ulubionych">&#10008;</a>
-                                </td>
-                                <td class="col-1 text-center"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
+                                <td class="col-1"><img src="{{ movie.avatar.url }}" alt="Avatar"></td>
                                 <td class="col-6">
                                     <ul>
                                         <li><a href="{% url 'movie-detail' pk=movie.pk %}" class="font-size-1-25">{{ movie }}</a></li>
@@ -64,12 +60,12 @@
                                         </li>
                                     </ul>
                                 </td>
-                                <td class="col-2 text-center"><span>&#10029;</span> {{ movie.rating }}</td>
-                                <td class="col-2 text-center">{{ movie.year }} r.</td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td class="col-12 text-center">Brak polubionych filmów</td>
+                                <td class="col-2 right-style"><span class="star-style">&#10029;</span> {{ movie.rating }}</td>
+                                <td class="col-2 right-style">{{ movie.year }} r.</td>
+                                <td class="col-1 right-style font-size-1-5">
+                                    <a href="{% url 'user-movie' pk=movie.pk %}?next={{ request.path }}"
+                                    class="text-danger" title="Usuń z ulubionych">&#10008;</a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

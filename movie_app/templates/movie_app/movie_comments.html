@@ -1,0 +1,50 @@
+{% extends 'movie_app/base.html' %}
+{% block content %}
+<div class="row container-body-style">
+    <div class="container-header-style">{{ movie }}</div>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="container-image-style">
+                <a href="{{ movie.avatar.url }}"><img src="{{ movie.avatar.url }}" alt="Avatar"></a>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="container-card-style">
+                <div class="font-size-1-5">
+                    Komentarze ( {{ movie.comments.count }} )
+                    <a href="{% url 'movie-detail' pk=movie.pk %}#comments" title="Wstecz">&#8679;</a>
+                </div>
+                <table class="table table-comment-style">
+                    <tbody>
+                        {% for comment in movie.movie_comments.all %}
+                            <tr>
+                                <td class="col-1"><img src="{{ comment.user.avatar.url }}" alt="Avatar"></td>
+                                <td class="col-11">
+                                    <div class="row comment-header-style">
+                                        <div class="col-10">
+                                            {{ comment.user }}, {{ comment.date_added|date:"j E Y, H:i"}}
+                                        </div>
+                                        <div class="col-2 right-style">
+                                            {% if comment.user == request.user %}
+                                                <a href="{% url 'user-comment-delete' pk=comment.pk %}?next={{ request.path }}#comments"
+                                                class="text-danger" title="Usuń komentarz">&#10008;</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="text-comment-style">
+                                        <span class="text-content">{{ comment.comment }}</span>
+                                        <span class="text-hidden display-none"></span>
+                                        <span class="dots display-none"> ...</span>
+                                        <button class="button-more-style button-more display-none" title="Rozwiń tekst">&#8681;</button>
+                                        <button class="button-more-style button-less display-none" title="Zwin tekst">&#8679;</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

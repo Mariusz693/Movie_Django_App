@@ -242,9 +242,10 @@ class Comment(models.Model):
         verbose_name = 'Komentarz'
         verbose_name_plural = 'Komentarze'
         unique_together = ['movie', 'user']
-        ordering = ['movie']
+        ordering = ['-date_added']
         
     comment = models.TextField(verbose_name='Komentarz')
+    date_added = models.DateTimeField(verbose_name='Data wpisu', auto_now_add=True)
     movie = models.ForeignKey(
         'Movie',
         related_name='movie_comments',

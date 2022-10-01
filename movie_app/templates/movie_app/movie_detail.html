@@ -1,4 +1,5 @@
 {% extends 'movie_app/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="row container-body-style">
     <div class="container-header-style">
@@ -18,10 +19,10 @@
                         <div class="col right-style font-size-1-5">
                             {% if movie in request.user.liked_movies.all %}
                                 <a href="{% url 'user-movie' pk=movie.pk %}?next={{ request.path }}"
-                                class="heart-red-style" title="Usuń z ulubionych">&#9829;</a>
+                                class="text-danger" title="Usuń z ulubionych">&#9829;</a>
                             {% else %}
                                 <a href="{% url 'user-movie' pk=movie.pk %}?next={{ request.path }}"
-                                class="heart-red-style" title="Dodaj do ulubionych">&#9825;</a>
+                                class="text-danger" title="Dodaj do ulubionych">&#9825;</a>
                             {% endif %}
                             {% if request.user.is_staff %}
                                 <a href="{% url 'movie-update' pk=movie.pk %}" title="Edytuj">&#9997;</a>
@@ -34,7 +35,7 @@
                 {% endif %}
                 <div>
                     <ul class="list-none-style">
-                        <li>Ranking: <span>&#10029;</span> {{ movie.rating }}</li>
+                        <li>Ranking: <span class="star-style">&#10029;</span> {{ movie.rating }}</li>
                         <li>Reżyseria:
                             {% if movie.director %}
                                 <a href="{% url 'person-detail' pk=movie.director.pk %}">{{ movie.director }}</a>
@@ -61,8 +62,14 @@
                         </ul>
                 </div>
                 {% if movie.plot %}
-                    <div class="font-size-1-5">Fabuła</div>
-                    <div class="text-style">{{ movie.plot }}</div>
+                    <div id="plot" class="font-size-1-5">Fabuła</div>
+                    <div class="text-style">
+                        <span class="text-content">{{ movie.plot }}</span>
+                        <span class="text-hidden display-none"></span>
+                        <span class="dots display-none"> ...</span>
+                        <button class="button-more-style button-more display-none" title="Rozwiń tekst">&#8681;</button>
+                        <button class="button-more-style button-less display-none" title="Zwin tekst">&#8679;</button>
+                    </div>
                 {% endif %}
                 {% if movie.characters.all %}
                     <div id="characters" class="row row-margin-style">
@@ -87,6 +94,69 @@
                             <button class="next">&#8250;</button>
                         </div>
                     </div>
+                {% endif %}
+                {% if movie.movie_comments.all or form %}
+                    <div id="comments" class="row row-margin-style">
+                        <div class="col font-size-1-5">Komentarze
+                            {% if movie.movie_comments.all %}
+                                <a href="{% url 'movie-comments' pk=movie.pk %}" title="Lista - komentarze">&#8680;</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <table class="table table-comment-style">
+                        <tbody>
+                            {% if form %}
+                                <tr>
+                                    <td class="col-1"><img src="{{ request.user.avatar.url }}" alt="Avatar"></td>
+                                    <td class="col-11">
+                                        <form class="form-comment-style" action="" method="POST">
+                                            {% csrf_token %}
+                                            <div class="row comment-header-style">
+                                                <div class="col-6">
+                                                    Dodaj komentarz:
+                                                </div>
+                                                <div class="col-6 right-style">
+                                                    <button type="submit" title="Zapisz komentarz">&#10003;</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    {{ form.comment|as_crispy_field }}
+                                                    {{ form.user|as_crispy_field }}
+                                                    {{ form.movie|as_crispy_field }}
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% for comment in movie.movie_comments.all|slice:":5" %}
+                                <tr>
+                                    <td class="col-1"><img src="{{ comment.user.avatar.url }}" alt="Avatar"></td>
+                                    <td class="col-11">
+                                        <div class="row comment-header-style">
+                                            <div class="col-10">
+                                                {{ comment.user }}, {{ comment.date_added|date:"j E Y, H:i"}}
+                                            </div>
+                                            <div class="col-2 right-style">
+                                                {% if comment.user == request.user %}
+                                                    <a href="{% url 'user-comment-delete' pk=comment.pk %}?next={{ request.path }}#comments"
+                                                    class="text-danger" title="Usuń komentarz">&#10008;</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="text-comment-style">
+                                            <span class="text-content">{{ comment.comment }}</span>
+                                            <span class="text-hidden display-none"></span>
+                                            <span class="dots display-none"> ...</span>
+                                            <button class="button-more-style button-more display-none" title="Rozwiń tekst">&#8681;</button>
+                                            <button class="button-more-style button-less display-none" title="Zwin tekst">&#8679;</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 {% endif %}
             </div>
         </div>

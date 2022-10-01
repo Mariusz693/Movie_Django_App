@@ -139,6 +139,10 @@ a:hover {
     font-size: 1.5rem;
 }
 
+.star-style {
+    color: #ffdb00;
+}
+
 .container-slider-style {
     position: relative;
     margin-top: 10px;
@@ -154,11 +158,6 @@ a:hover {
 .container-slider-style .card-style div {
     text-align: center;
     margin-top: 10px;
-    font-size: 1.5rem;
-}
-
-.container-slider-style .card-style span {
-    color: #ffdb00;
     font-size: 1.5rem;
 }
 
@@ -208,11 +207,6 @@ a:hover {
     list-style: none;
 }
 
-.list-none-style span {
-    color: #ffdb00;
-}
-
-
 .text-style {
     text-indent: 30px;
     text-align: justify;
@@ -221,14 +215,16 @@ a:hover {
 .table-style tr td {
     color: white;
     vertical-align: middle;
-    border-bottom: 2px solid gray;
+    border: none;
 }
 
-.table-style span {
-    color: #ffdb00;
+.table-comment-style tr td {
+    color: white;
+    border: none;
 }
 
-.table-style img {
+.table-style img,
+.table-comment-style img {
     width: 64px;
     margin: 5px;
     background-color: white;
@@ -267,6 +263,14 @@ a:hover {
     margin-top: 5px;
 }
 
+.button-more-style {
+    background-color: transparent;
+    border: none;
+    color: #ffdb00;
+    font-size: 1.2em;    
+    margin-top: -10%;
+}
+
 .button-outline-style span {
     color: #ffdb00;
 }
@@ -290,9 +294,17 @@ a:hover {
     border-radius: 0px;
 }
 
+.form-comment-style textarea {
+    background-color: black;
+    color: white;
+    border: none;
+    font-size: 0.8rem;
+}
+
 .form-style input:focus,
 .form-style textarea:focus,
-.form-style select:focus {
+.form-style select:focus,
+.form-comment-style textarea:focus {
     background-color: inherit;
     color: inherit;
     border-color: inherit;
@@ -355,7 +367,11 @@ a:hover {
 .form-style textarea:-webkit-autofill,
 .form-style textarea:-webkit-autofill:hover, 
 .form-style textarea:-webkit-autofill:focus, 
-.form-style textarea:-webkit-autofill:active { 
+.form-style textarea:-webkit-autofill:active
+.form-comment-style textarea:-webkit-autofill,
+.form-comment-style textarea:-webkit-autofill:hover, 
+.form-comment-style textarea:-webkit-autofill:focus, 
+.form-comment-style textarea:-webkit-autofill:active { 
     box-shadow: 0 0 0 30px black inset !important;
     -webkit-box-shadow: 0 0 0 30px black inset !important;
     background-color: black;
@@ -366,17 +382,10 @@ a:hover {
 }
 
 .form-style input:-webkit-autofill,
+.form-style select:-webkit-autofill,
 .form-style textarea:-webkit-autofill,
-.form-style select:-webkit-autofill {
+.form-comment-style textarea:-webkit-autofill {
     -webkit-text-fill-color: white !important;
-}
-
-.button-search-style {
-    background-color: black;
-    margin-bottom: -2.5px;
-    color: #ffdb00;
-    border: none;
-    font-size: 1.5rem;    
 }
 
 .card-slider-style {
@@ -413,11 +422,6 @@ a:hover {
     left: 6px;
     color: black;
     font-weight: bold;
-}
-
-.corner-star-style span {
-    color: #ffdb00;
-    font-size: 1.5rem;
 }
 
 .card-slider-button-style button {
@@ -461,10 +465,28 @@ a:hover {
     color: red;
 }
 
-.heart-red-style {
-    color: red;
+
+
+
+
+.comment-header-style {
+    color: gray;
+    margin-top: 4px;
 }
 
-.heart-red-style:hover {
-    color: red;
+.comment-header-style a {
+    font-size: 1.25em;
 }
+
+.comment-header-style button {
+    color: #ffdb00;
+    background-color: transparent;
+    border: none;
+    font-size: 1.25em;
+}
+
+.text-comment-style {
+    font-size: 0.9rem;
+    text-align: justify;
+}
+

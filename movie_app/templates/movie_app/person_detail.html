@@ -18,10 +18,10 @@
                         <div class="col right-style font-size-1-5">
                             {% if person in request.user.liked_persons.all %}
                                 <a href="{% url 'user-person' pk=person.pk %}?next={{ request.path }}"
-                                class="heart-red-style" title="Usuń z ulubionych">&#9829;</a>
+                                class="text-danger" title="Usuń z ulubionych">&#9829;</a>
                             {% else %}
                                 <a href="{% url 'user-person' pk=person.pk %}?next={{ request.path }}"
-                                class="heart-red-style" title="Dodaj do ulubionych">&#9825;</a>
+                                class="text-danger" title="Dodaj do ulubionych">&#9825;</a>
                             {% endif %}
                             {% if request.user.is_staff %}
                                 <a href="{% url 'person-update' pk=person.pk %}" title="Edytuj">&#9997;</a>
@@ -46,7 +46,13 @@
                 </div>
                 {% if person.biography %}
                     <div class="font-size-1-5">Biografia</div>
-                    <div class="text-style">{{ person.biography }}</div>
+                    <div class="text-style">
+                        <span class="text-content">{{ person.biography }}</span>
+                        <span class="text-hidden display-none"></span>
+                        <span class="dots display-none"> ...</span>
+                        <button class="button-more-style button-more display-none" title="Rozwiń tekst">&#8681;</button>
+                        <button class="button-more-style button-less display-none" title="Zwin tekst">&#8679;</button>
+                    </div>
                 {% endif %}
                 {% if person.directors.all or person.screenplays.all or person.characters.all %}
                     <div id="movies" class="row-margin-style font-size-1-5">Filmy</div>
@@ -85,7 +91,7 @@
                                     <div class="card-slider-body-style">
                                         <img src="{{ character.movie.avatar.url }}" alt="Avatar">
                                         <span class="corner-star-style">
-                                            <span>&#10029;</span>{{ character.movie.rating }}
+                                            <span class="star-style">&#10029;</span>{{ character.movie.rating }}
                                         </span>
                                         <div>
                                             <a href="{% url 'movie-detail' pk=character.movie.pk %}">{{ character.movie }}</a>
@@ -107,7 +113,7 @@
                                     <div class="card-slider-body-style">
                                         <img src="{{ movie.avatar.url }}" alt="Avatar">
                                         <span class="corner-star-style">
-                                            <span>&#10029;</span>{{ movie.rating }}
+                                            <span class="star-style">&#10029;</span>{{ movie.rating }}
                                         </span>
                                         <div>
                                             <a href="{% url 'movie-detail' pk=movie.pk %}">{{ movie }}</a>
@@ -129,7 +135,7 @@
                                     <div class="card-slider-body-style">
                                         <img src="{{ movie.avatar.url }}" alt="Avatar">
                                         <span class="corner-star-style">
-                                            <span>&#10029;</span>{{ movie.rating }}
+                                            <span class="star-style">&#10029;</span>{{ movie.rating }}
                                         </span>
                                         <div>
                                             <a href="{% url 'movie-detail' pk=movie.pk %}">{{ movie }}</a>
