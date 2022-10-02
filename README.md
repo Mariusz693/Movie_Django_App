@@ -28,12 +28,14 @@
 * django-formtools - use SessionWizardView to create movie in four steps
 
 
+
 Visitor                                                 |Visitor                                             
 :------------------------------------------------------:|:------------------------------------------------------:
 ![Movie_App](../main/screenshot/visitor_1.png)          |![Movie_App](../main/screenshot/visitor_2.png)
 ![Movie_App](../main/screenshot/visitor_3.png)          |![Movie_App](../main/screenshot/visitor_4.png)
 ![Movie_App](../main/screenshot/visitor_5.png)          |![Movie_App](../main/screenshot/visitor_6.png)
 ![Movie_App](../main/screenshot/visitor_7.png)          |![Movie_App](../main/screenshot/visitor_8.png)
+
 
 
 User                                                    |User                                             
@@ -43,6 +45,7 @@ User                                                    |User
 ![Movie_App](../main/screenshot/user_5.png)             |![Movie_App](../main/screenshot/user_6.png)
 
 
+
 Staff                                                   |Staff                                            
 :------------------------------------------------------:|:------------------------------------------------------:
 ![Movie_App](../main/screenshot/staff_1.png)            |![Movie_App](../main/screenshot/staff_2.png)
@@ -50,11 +53,6 @@ Staff                                                   |Staff
 ![Movie_App](../main/screenshot/staff_5.png)            |![Movie_App](../main/screenshot/staff_6.png)
 ![Movie_App](../main/screenshot/staff_7.png)            |![Movie_App](../main/screenshot/staff_8.png)
 ![Movie_App](../main/screenshot/staff_9.png)            |![Movie_App](../main/screenshot/staff_10.png)
-
-
-Video                                                   |Video                                            
-:------------------------------------------------------:|:------------------------------------------------------:
-![Movie_App](../main/screenshot/video_1.webm)           |![Movie_App](../main/screenshot/video_2.webm)
 
 
 ### Contact
