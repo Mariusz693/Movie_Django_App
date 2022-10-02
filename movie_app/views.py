@@ -664,7 +664,7 @@ class MovieDetailView(DetailView):
         if form.is_valid():
             form.save()
 
-        return redirect(reverse_lazy('movie-detail', args=(self.get_object().pk,)))
+        return redirect(reverse_lazy('movie-detail', args=(self.get_object().pk,)) + f'#comments')
 
     def get_context_data(self, *args, **kwargs):
         

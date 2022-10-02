@@ -6,6 +6,7 @@ from .models import User, Person, Movie, Genre, Character, Comment
 
 # Register your models here.
 
+
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     
@@ -46,8 +47,11 @@ class PersonAdmin(admin.ModelAdmin):
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('title', 'year', 'rating')
 
+
 admin.site.register(Genre)
 
+
 admin.site.register(Character)
+
 
 admin.site.register(Comment)

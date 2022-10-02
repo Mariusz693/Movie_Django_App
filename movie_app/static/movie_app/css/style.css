@@ -298,7 +298,7 @@ a:hover {
     background-color: black;
     color: white;
     border: none;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 .form-style input:focus,
@@ -464,10 +464,6 @@ a:hover {
     font-size: 1.25rem;
     color: red;
 }
-
-
-
-
 
 .comment-header-style {
     color: gray;
