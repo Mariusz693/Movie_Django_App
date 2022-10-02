@@ -38,9 +38,9 @@ Visitor                                                 |Visitor
 
 User                                                    |User                                             
 :------------------------------------------------------:|:------------------------------------------------------:
-![Movie_App](../main/screenshot/User/user_1.png)        |![Movie_App](../main/screenshot/User/user_2.png)
-![Movie_App](../main/screenshot/User/user_3.png)        |![Movie_App](../main/screenshot/User/user_4.png)
-![Movie_App](../main/screenshot/User/user_5.png)        |![Movie_App](../main/screenshot/User/user_6.png)
+![Movie_App](../main/screenshot/user_1.png)             |![Movie_App](../main/screenshot/user_2.png)
+![Movie_App](../main/screenshot/user_3.png)             |![Movie_App](../main/screenshot/user_4.png)
+![Movie_App](../main/screenshot/user_5.png)             |![Movie_App](../main/screenshot/user_6.png)
 
 
 Staff                                                   |Staff                                            
@@ -54,7 +54,7 @@ Staff                                                   |Staff
 
 Video                                                   |Video                                            
 :------------------------------------------------------:|:------------------------------------------------------:
-![Movie_App](../main/screenshot/Video/video_1.png)      |![Movie_App](../main/screenshot/Video/video_2.png)
+![Movie_App](../main/screenshot/video_1.png)            |![Movie_App](../main/screenshot/video_2.png)
 
 
 ### Contact
