@@ -30,10 +30,10 @@
 
 Visitor                                                 |Visitor                                             
 :------------------------------------------------------:|:------------------------------------------------------:
-![Movie_App](../main/screenshot/Visitor/visitor_1.png)  |![Movie_App](../main/screenshot/Visitor/visitor_2.png)
-![Movie_App](../main/screenshot/Visitor/visitor_3.png)  |![Movie_App](../main/screenshot/Visitor/visitor_4.png)
-![Movie_App](../main/screenshot/Visitor/visitor_5.png)  |![Movie_App](../main/screenshot/Visitor/visitor_6.png)
-![Movie_App](../main/screenshot/Visitor/visitor_7.png)  |![Movie_App](../main/screenshot/Visitor/visitor_8.png)
+![Movie_App](../main/screenshot/visitor_1.png)          |![Movie_App](../main/screenshot/visitor_2.png)
+![Movie_App](../main/screenshot/visitor_3.png)          |![Movie_App](../main/screenshot/visitor_4.png)
+![Movie_App](../main/screenshot/visitor_5.png)          |![Movie_App](../main/screenshot/visitor_6.png)
+![Movie_App](../main/screenshot/visitor_7.png)          |![Movie_App](../main/screenshot/visitor_8.png)
 
 
 User                                                    |User                                             
@@ -45,16 +45,16 @@ User                                                    |User
 
 Staff                                                   |Staff                                            
 :------------------------------------------------------:|:------------------------------------------------------:
-![Movie_App](../main/screenshot/Staff/staff_1.png)      |![Movie_App](../main/screenshot/Staff/staff_2.png)
-![Movie_App](../main/screenshot/Staff/staff_3.png)      |![Movie_App](../main/screenshot/Staff/staff_4.png)
-![Movie_App](../main/screenshot/Staff/staff_5.png)      |![Movie_App](../main/screenshot/Staff/staff_6.png)
-![Movie_App](../main/screenshot/Staff/staff_7.png)      |![Movie_App](../main/screenshot/Staff/staff_8.png)
-![Movie_App](../main/screenshot/Staff/staff_9.png)      |![Movie_App](../main/screenshot/Staff/staff_10.png)
+![Movie_App](../main/screenshot/staff_1.png)            |![Movie_App](../main/screenshot/staff_2.png)
+![Movie_App](../main/screenshot/staff_3.png)            |![Movie_App](../main/screenshot/staff_4.png)
+![Movie_App](../main/screenshot/staff_5.png)            |![Movie_App](../main/screenshot/staff_6.png)
+![Movie_App](../main/screenshot/staff_7.png)            |![Movie_App](../main/screenshot/staff_8.png)
+![Movie_App](../main/screenshot/staff_9.png)            |![Movie_App](../main/screenshot/staff_10.png)
 
 
 Video                                                   |Video                                            
 :------------------------------------------------------:|:------------------------------------------------------:
-![Movie_App](../main/screenshot/video_1.png)            |![Movie_App](../main/screenshot/video_2.png)
+![Movie_App](../main/screenshot/video_1.webm)           |![Movie_App](../main/screenshot/video_2.webm)
 
 
 ### Contact
